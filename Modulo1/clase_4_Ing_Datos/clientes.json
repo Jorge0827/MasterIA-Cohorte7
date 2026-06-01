@@ -1,0 +1,248 @@
+[
+    {
+        "id_cliente": "C01",
+        "nombre": "Valentina Ríos Herrera",
+        "ciudad": "Bogotá",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C02",
+        "nombre": "Sebastián Muñoz Ospina",
+        "ciudad": "Cali",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C03",
+        "nombre": "Mariana Gómez Castillo",
+        "ciudad": "Bogotá",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C04",
+        "nombre": "Andrés Felipe Torres",
+        "ciudad": "Medellín",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C05",
+        "nombre": "Luisa Fernanda Pedraza",
+        "ciudad": "Barranquilla",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C06",
+        "nombre": "Camilo Andrés Vargas",
+        "ciudad": "Cali",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C07",
+        "nombre": "Natalia Restrepo Vélez",
+        "ciudad": "Cali",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C08",
+        "nombre": "Diego Armando Salcedo",
+        "ciudad": null,
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C09",
+        "nombre": "Alejandra Mora Quintero",
+        "ciudad": "Envigado",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C10",
+        "nombre": "Juan Pablo Echeverri",
+        "ciudad": "Medellín",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C11",
+        "nombre": "Daniela Cardona Mejía",
+        "ciudad": "Cali",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C12",
+        "nombre": "Esteban Zuluaga Patiño",
+        "ciudad": "Bello",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C13",
+        "nombre": "Paola Andrea Jiménez",
+        "ciudad": "Medellín",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C14",
+        "nombre": "Nicolás Bedoya Arango",
+        "ciudad": "Bello",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C15",
+        "nombre": "Sara Lucía Bermúdez",
+        "ciudad": "Cali",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C16",
+        "nombre": "Juliana Acosta Rondón",
+        "ciudad": "Barranquilla",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C17",
+        "nombre": "Miguel Ángel Suárez",
+        "ciudad": "Barranquilla",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C18",
+        "nombre": "Isabella Moreno Delgado",
+        "ciudad": "Cali",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C19",
+        "nombre": "Ricardo Adolfo Londoño",
+        "ciudad": "Envigado",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C20",
+        "nombre": "Manuela Ossa Agudelo",
+        "ciudad": "Medellín",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C21",
+        "nombre": "Tomás Esteban Castaño",
+        "ciudad": "Cali",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C22",
+        "nombre": "Gabriela Montoya Serna",
+        "ciudad": "Medellín",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C23",
+        "nombre": "Felipe Augusto Correa",
+        "ciudad": "Bello",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C24",
+        "nombre": "Sofía Valentina Cano",
+        "ciudad": "Envigado",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C25",
+        "nombre": "Cristian Camilo Henao",
+        "ciudad": "Envigado",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C26",
+        "nombre": "Laura Catalina Giraldo",
+        "ciudad": "Bello",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C27",
+        "nombre": "Mateo Alejandro Duque",
+        "ciudad": "Envigado",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C28",
+        "nombre": "Vanessa Paola Lozano",
+        "ciudad": "Cali",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C29",
+        "nombre": "Jhon Jairo Sepúlveda",
+        "ciudad": "Envigado",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C30",
+        "nombre": "Ángela Patricia Rojas",
+        "ciudad": "Bello",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C31",
+        "nombre": "David Santiago Peña",
+        "ciudad": "Bogotá",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C32",
+        "nombre": "Melissa Andrea Franco",
+        "ciudad": "Envigado",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C33",
+        "nombre": "Santiago Arbeláez Ríos",
+        "ciudad": "Envigado",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C34",
+        "nombre": "Claudia Patricia Vélez",
+        "ciudad": "Bello",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C35",
+        "nombre": "Hernán Darío Palacio",
+        "ciudad": "Barranquilla",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C36",
+        "nombre": "Lina María Gallego",
+        "ciudad": "Cali",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C37",
+        "nombre": "Alejandro Pineda Ruiz",
+        "ciudad": "Bogotá",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C38",
+        "nombre": "Carolina Escobar Uribe",
+        "ciudad": "Bello",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C39",
+        "nombre": "Jorge Luis Barrera",
+        "ciudad": "Barranquilla",
+        "cliente_frecuente": false
+    },
+    {
+        "id_cliente": "C40",
+        "nombre": "Yesenia Tatiana Díaz",
+        "ciudad": "Barranquilla",
+        "cliente_frecuente": true
+    },
+    {
+        "id_cliente": "C06",
+        "nombre": "Camilo Andrés Vargas",
+        "ciudad": "Cali",
+        "cliente_frecuente": true
+    }
+]
