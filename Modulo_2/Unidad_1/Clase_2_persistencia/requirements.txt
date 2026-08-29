@@ -1,0 +1,29 @@
+# Dependencias del proyecto (Clase: Persistencia y Bases de Datos)
+#
+# Instalacion dentro del entorno conda del curso:
+#   conda activate py_env
+#   pip install -r requirements.txt
+#
+# Las versiones estan fijadas para que todos los estudiantes tengan
+# exactamente el mismo entorno y los resultados sean reproducibles.
+
+# Manipulacion de datos en memoria (DataFrames)
+pandas==2.3.3
+
+# Calculo vectorizado, lo usa el generador de datos sinteticos
+numpy==2.3.5
+
+# ORM y capa de conexion a bases de datos SQL
+SQLAlchemy==2.0.52
+
+# Driver de PostgreSQL para Python (psycopg 3, con binarios precompilados)
+psycopg[binary]==3.3.4
+
+# Cliente oficial de MongoDB para Python
+pymongo==4.17.0
+
+# Lectura de credenciales desde el archivo .env
+python-dotenv==1.2.2
+
+# Kernel de Python para ejecutar los notebooks de Jupyter
+ipykernel==7.2.0
