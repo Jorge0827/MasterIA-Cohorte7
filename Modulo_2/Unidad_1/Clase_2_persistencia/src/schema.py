@@ -15,6 +15,10 @@ Modelo de datos:
     productos ─┘
     clientes  ────> predicciones    (una prediccion se hace sobre un cliente)
     auditoria                       (tabla independiente: registra los procesos)
+
+    Clase 4 (SQL avanzado / historial de entrenamiento):
+    historial_entrenamiento  ──> dataset_entrenamiento
+         (metadatos del snapshot)    (filas congeladas: features + target)
 """
 
 from sqlalchemy import (
@@ -148,6 +152,78 @@ auditoria = Table(
     Column("duracion_segundos", Numeric(10, 3)),
     CheckConstraint("estado IN ('exito', 'error')", name="ck_auditoria_estado"),
     comment="Trazabilidad de los procesos ejecutados sobre los datos",
+)
+
+
+# -----------------------------------------------------------------------------
+# Clase 4: historial de datasets de entrenamiento
+#
+# Idea: NO se entrena un modelo "sobre la tabla ventas de hoy", porque manana
+# esa tabla habra cambiado (nuevas ventas, correcciones, recargas). Se CONGELA
+# un recorte con fecha_corte, se guarda QUE consulta lo genero y se versiona.
+# Asi puedes repetir el mismo entrenamiento dentro de 6 meses.
+# -----------------------------------------------------------------------------
+
+historial_entrenamiento = Table(
+    "historial_entrenamiento",
+    metadata,
+    # SERIAL: cada snapshot recibe un id automatico.
+    Column("snapshot_id", Integer, primary_key=True, autoincrement=True),
+    # Nombre legible del dataset, por ejemplo "features_gasto_90d".
+    Column("nombre_dataset", String(80), nullable=False),
+    # Version del recorte (1.0.0, 1.0.1...). Permite comparar experimentos.
+    Column("version", String(20), nullable=False),
+    # Cuando se congelo. La pone PostgreSQL si no la enviamos.
+    Column("fecha_creacion", DateTime, nullable=False, server_default=func.now()),
+    # Hasta que dia usamos ventas como HISTORICO (el pasado del modelo).
+    Column("fecha_corte", Date, nullable=False),
+    # El SQL EXACTO que materializo las filas. Es el linaje del dataset.
+    Column("consulta_sql", Text, nullable=False),
+    Column("n_filas", Integer, nullable=False, default=0),
+    Column("n_columnas", Integer),
+    Column("descripcion", Text),
+    # Filtros u opciones en texto (JSON o clave=valor). No es un JSONB a
+    # proposito: en clase basta un string legible.
+    Column("parametros", Text),
+    # Hash de las filas: si dos snapshots tienen el mismo checksum, son iguales.
+    Column("checksum", String(64)),
+    Column("estado", String(20), nullable=False, default="activo"),
+    CheckConstraint(
+        "estado IN ('activo', 'archivado', 'error')",
+        name="ck_historial_estado",
+    ),
+    comment="Metadatos de cada dataset congelado para entrenar modelos",
+)
+
+dataset_entrenamiento = Table(
+    "dataset_entrenamiento",
+    metadata,
+    Column("fila_id", Integer, primary_key=True, autoincrement=True),
+    # Cada fila pertenece a UN snapshot. Si borras el snapshot, se van las filas.
+    Column(
+        "snapshot_id",
+        Integer,
+        ForeignKey("historial_entrenamiento.snapshot_id", ondelete="CASCADE"),
+        nullable=False,
+    ),
+    # El cliente sigue existiendo en la tabla maestra (integridad referencial).
+    Column("cliente_id", Integer, ForeignKey("clientes.cliente_id"), nullable=False),
+    # --- features (lo que el modelo VE al predecir) ---
+    Column("segmento", String(20)),
+    Column("pais", String(80)),
+    Column("num_compras", Integer, nullable=False),
+    Column("gasto_historico", Numeric(12, 2), nullable=False),
+    Column("ticket_medio", Numeric(12, 2), nullable=False),
+    Column("cantidad_total", Integer, nullable=False),
+    Column("dias_desde_ultima_compra", Integer),
+    Column("canal_preferido", String(20)),
+    Column("categoria_favorita", String(60)),
+    # --- target (lo que el modelo INTENTA acertar) ---
+    # Gasto del cliente en los 90 dias POSTERIORES a fecha_corte.
+    # Si no compro nada en ese periodo, vale 0: eso tambien es informacion.
+    Column("gasto_siguiente_periodo", Numeric(12, 2), nullable=False, default=0),
+    Column("fecha_corte", Date, nullable=False),
+    comment="Filas congeladas (features + target) de un snapshot de entrenamiento",
 )
 
 

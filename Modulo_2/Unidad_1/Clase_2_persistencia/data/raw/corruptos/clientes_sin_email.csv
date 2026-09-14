@@ -1,0 +1,31 @@
+cliente_id,nombre,ciudad,pais,segmento,fecha_registro
+1,Luis Gomez,Madrid,Espana,bronce,2022-04-13
+2,Sergio Sanchez,Buenos Aires,Argentina,bronce,2024-11-10
+3,Andres Ramirez,Valencia,Espana,bronce,2023-07-28
+4,Sofia Rojas,Buenos Aires,Argentina,oro,2024-12-20
+5,Sofia Perez,Ciudad de Mexico,Mexico,bronce,2023-03-31
+6,Ruben Herrera,Valencia,Espana,bronce,2024-07-01
+7,Luis Castro,Cali,Colombia,bronce,2022-12-29
+8,Andres Lopez,Madrid,Espana,platino,2023-05-02
+9,Laura Ortiz,Buenos Aires,Argentina,bronce,2023-01-15
+10,Luis Garcia,Bogota,Colombia,bronce,2023-08-23
+11,Lucia Rojas,Medellin,Colombia,bronce,2022-09-02
+12,Alberto Diaz,Barcelona,Espana,bronce,2023-07-06
+13,Marta Rojas,Medellin,Colombia,oro,2024-07-08
+14,Sergio Herrera,Medellin,Colombia,plata,2022-06-20
+15,Marta Rojas,Valencia,Espana,bronce,2024-05-18
+16,Sergio Rojas,Quito,Ecuador,oro,2024-07-24
+17,Lucia Silva,Bogota,Colombia,bronce,2022-02-08
+18,Maria Moreno,Valencia,Espana,oro,2024-01-10
+19,Paula Silva,Ciudad de Mexico,Mexico,bronce,2023-06-16
+20,Diego Diaz,Bogota,Colombia,bronce,2023-11-30
+21,Lucia Sanchez,Cali,Colombia,oro,2022-11-19
+22,Miguel Sanchez,Buenos Aires,Argentina,oro,2022-08-30
+23,Carlos Castro,Madrid,Espana,plata,2022-11-11
+24,Julia Ramirez,Ciudad de Mexico,Mexico,plata,2022-06-17
+25,Sergio Rodriguez,Madrid,Espana,oro,2023-03-21
+26,Carmen Sanchez,Madrid,Espana,plata,2024-08-13
+27,Sofia Navarro,Barcelona,Espana,bronce,2024-05-02
+28,Paula Moreno,Barcelona,Espana,bronce,2022-07-16
+29,Lucia Herrera,Medellin,Colombia,plata,2023-09-04
+30,Sofia Lopez,Quito,Ecuador,plata,2022-03-22
