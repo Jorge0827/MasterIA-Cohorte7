@@ -1,0 +1,17 @@
+# Unidad 2 · Clase 3 — FastAPI y modelos
+#   conda activate py_env
+#   pip install -r requirements-fastapi.txt
+
+# Servidor HTTP asíncrono
+fastapi==0.116.1
+uvicorn[standard]==0.35.0
+
+# Validacion de contratos JSON (FastAPI ya lo usa; lo fijamos)
+pydantic==2.11.7
+
+# Modelos de Machine Learning (bosque + MLP)
+scikit-learn==1.7.1
+joblib==1.5.1
+
+# Cliente HTTP para llamar a la API desde el notebook
+httpx==0.28.1
