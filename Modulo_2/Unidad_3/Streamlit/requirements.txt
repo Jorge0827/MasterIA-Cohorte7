@@ -1,0 +1,12 @@
+# Clase Streamlit (carpeta aislada)
+#   conda activate py_env
+#   cd streamlit
+#   pip install -r requirements.txt
+#
+# scikit-learn y joblib van PINADOS a la misma versión que fabricó
+# los .joblib (clase FastAPI). Si cambias sklearn, joblib.load puede petar.
+
+streamlit==1.39.0
+pandas==2.2.3
+scikit-learn==1.7.1
+joblib==1.5.1

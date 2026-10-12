@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Libreto tecnico Streamlit</title>
+  <style>
+
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">@page {size: A4;margin: 22mm 18mm 22mm 18mm;}html { font-size: 10.5pt; }body {font-family: "Segoe UI", "Calibri", "Liberation Sans", sans-serif;color: #1a1f24;line-height: 1.45;max-width: 180mm;margin: 0 auto;}h1, h2, h3, h4 { color: #0f2744; page-break-after: avoid; }h1 { font-size: 22pt; border-bottom: 3px solid #c45c26; padding-bottom: 6px; margin-top: 28px; }h2 { font-size: 15pt; margin-top: 22px; border-bottom: 1px solid #c5d0da; padding-bottom: 3px; }h3 { font-size: 12.5pt; margin-top: 16px; }h4 { font-size: 11pt; margin-top: 12px; }p { margin: 0.55em 0; text-align: justify; }li { margin: 0.2em 0; }ul, ol { margin: 0.4em 0 0.6em 1.3em; }a { color: #1b4f72; text-decoration: none; }code {font-family: Consolas, "Cascadia Mono", monospace;font-size: 9.2pt;background: #eef2f6;padding: 0 3px;border-radius: 3px;}pre {background: #0f2744;color: #e8eef4;padding: 10px 12px;border-radius: 4px;font-size: 8.6pt;line-height: 1.35;overflow-x: hidden;white-space: pre-wrap;page-break-inside: avoid;}pre code { background: none; color: inherit; padding: 0; }table { border-collapse: collapse; width: 100%; margin: 0.8em 0 1em; font-size: 9.4pt; page-break-inside: avoid; }th { background: #0f2744; color: #fff; text-align: left; padding: 5px 7px; }td { border: 1px solid #c5d0da; padding: 5px 7px; vertical-align: top; }tr:nth-child(even) td { background: #f4f7fa; }blockquote {margin: 0.8em 0;padding: 8px 12px;border-left: 4px solid #c45c26;background: #f7f1ea;page-break-inside: avoid;}blockquote p { text-align: left; margin: 0.3em 0; }.cover { page-break-after: always; text-align: left; margin-top: 28mm; }.cover .kicker { letter-spacing: 0.12em; text-transform: uppercase; color: #c45c26; font-size: 10pt; font-weight: 700; }.cover h1 { font-size: 28pt; border: 0; margin: 12px 0 8px; }.cover .sub { font-size: 13pt; color: #3d4a57; }.cover .meta { margin-top: 28px; font-size: 10.5pt; color: #3d4a57; }.toc { page-break-after: always; }hr { border: 0; border-top: 1px solid #c5d0da; margin: 1.4em 0; }.ref { font-size: 9.3pt; }.small { font-size: 9.3pt; color: #3d4a57; }</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Libreto tecnico Streamlit</h1>
+</header>
+<div class="cover">
+<p class="kicker">
+Máster en Inteligencia Artificial · Unidad 2
+</p>
+<h1 id="libreto-técnico-de-clase">Libreto técnico de clase</h1>
+<h2 id="streamlit-el-mostrador-del-modelo-de-gasto">Streamlit: el
+mostrador del modelo de gasto</h2>
+<p class="sub">
+Teoría oficial, arquitectura de ejecución y aplicación al proyecto de
+ventas. Material de estudio para 2 horas de clase y consulta posterior.
+</p>
+<p class="meta">
+<strong>Carpeta aislada:</strong> <code>streamlit/</code><br>
+<strong>Versión de la app:</strong> Streamlit 1.39.0 · scikit-learn
+1.7.1 · joblib 1.5.1<br> <strong>Artefacto:</strong> predicción de
+<em>gasto a 90 días</em> a partir de un <code>.joblib</code> ya
+entrenado<br> <strong>Uso:</strong> leer antes o durante la clase; no
+sustituye ejecutar el notebook ni <code>streamlit run app.py</code>
+</p>
+</div>
+<section id="contenido" class="toc">
+<h1>Contenido</h1>
+<ol type="1">
+<li><a href="#1-cómo-usar-este-libreto">Cómo usar este libreto</a></li>
+<li><a href="#2-objetivo-de-la-clase-y-qué-no-es">Objetivo de la clase y
+qué no es</a></li>
+<li><a href="#3-el-problema-de-negocio">El problema de negocio</a></li>
+<li><a href="#4-entrenar-no-es-servir">Entrenar no es servir</a></li>
+<li><a href="#5-dos-puertas-al-mismo-cerebro-fastapi-y-streamlit">Dos
+puertas al mismo cerebro: FastAPI y Streamlit</a></li>
+<li><a href="#6-qué-es-streamlit-según-la-documentación-oficial">Qué es
+Streamlit según la documentación oficial</a></li>
+<li><a href="#7-modelo-de-ejecución-el-rerun">Modelo de ejecución: el
+rerun</a></li>
+<li><a href="#8-widgets-pintan-y-devuelven-un-valor">Widgets: pintan y
+devuelven un valor</a></li>
+<li><a href="#9-formularios-no-predecir-en-cada-tecla">Formularios: no
+predecir en cada tecla</a></li>
+<li><a href="#10-caché-oficial-cache_data-y-cache_resource">Caché
+oficial: <code>cache_data</code> y <code>cache_resource</code></a></li>
+<li><a href="#11-session-state-memoria-de-una-pestaña">Session State:
+memoria de una pestaña</a></li>
+<li><a href="#12-diseño-de-la-página">Diseño de la página</a></li>
+<li><a href="#13-el-modelo-de-esta-clase">El modelo de esta
+clase</a></li>
+<li><a href="#14-persistencia-del-modelo-joblib-y-scikit-learn">Persistencia
+del modelo: joblib y scikit-learn</a></li>
+<li><a href="#15-mapa-de-la-carpeta-aislada">Mapa de la carpeta
+aislada</a></li>
+<li><a href="#16-recorrido-de-apppy">Recorrido de
+<code>app.py</code></a></li>
+<li><a href="#17-lo-que-es-de-trabajo-y-lo-que-es-atajo-de-clase">Lo que
+es de trabajo y lo que es atajo de clase</a></li>
+<li><a href="#18-arranque-y-comprobaciones">Arranque y
+comprobaciones</a></li>
+<li><a href="#19-glosario">Glosario</a></li>
+<li><a href="#20-referencias-oficiales">Referencias oficiales</a></li>
+<li><a href="#21-ejercicios-de-estudio">Ejercicios de estudio</a></li>
+</ol>
+</section>
+<h1 id="cómo-usar-este-libreto">1. Cómo usar este libreto</h1>
+<p>Este documento es el <strong>material teórico oficial de la clase
+Streamlit</strong>. Está escrito para que un alumno que no haya tocado
+una web en Python pueda seguirlo, y para que el docente lo use como
+guion de pizarra.</p>
+<p>Tres capas, no se mezclan:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Dónde</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Teoría y contratos</td>
+<td>este PDF</td>
+<td>vocabulario, modelo mental, citas oficiales</td>
+</tr>
+<tr>
+<td>Explicar y predecir sin UI</td>
+<td><code>notebooks/01_streamlit_prediccion.ipynb</code></td>
+<td>ejecutar <code>joblib.load</code> y <code>predict()</code></td>
+</tr>
+<tr>
+<td>La app de verdad</td>
+<td><code>app.py</code> / <code>app_hola.py</code></td>
+<td><code>streamlit run</code> abre el navegador</td>
+</tr>
+</tbody>
+</table>
+<p>La guía del docente (<code>GUIA_DOCENTE.md</code>) es el
+<strong>minutado</strong>. Este libreto es el
+<strong>contenido</strong>.</p>
+<p>Regla de lectura: cada sección responde una pregunta de negocio o de
+ingeniería. Si no puedes decir en una frase <em>qué problema
+resuelve</em>, no pases de capítulo.</p>
+<h1 id="objetivo-de-la-clase-y-qué-no-es">2. Objetivo de la clase y qué
+no es</h1>
+<p><strong>Objetivo.</strong> Construir un <em>mostrador</em> (interfaz
+humana) delante de un modelo <strong>ya entrenado</strong>, de modo que
+negocio o el propio científico de datos pruebe predicciones sin Postman,
+sin JSON y sin Jupyter.</p>
+<p><strong>Qué se lleva el alumno</strong></p>
+<ol type="1">
+<li>Distinguir <em>entrenar</em> (<code>fit</code>) de <em>servir</em>
+(<code>predict</code>).</li>
+<li>Explicar el modelo de ejecución de Streamlit (rerun de todo el
+script).</li>
+<li>Elegir <code>@st.cache_resource</code> para un modelo y
+<code>@st.cache_data</code> para un CSV.</li>
+<li>Usar <code>st.form</code> para no disparar inferencia en cada
+tecla.</li>
+<li>Servir <strong>el mismo</strong> <code>.joblib</code> que FastAPI,
+por otra puerta.</li>
+</ol>
+<p><strong>Qué no es esta clase</strong></p>
+<ul>
+<li>No es una clase de Machine Learning: no afinamos hiperparámetros ni
+el MAE.</li>
+<li>No es una clase de frontend (no hay React, HTML ni CSS que el alumno
+deba escribir).</li>
+<li>No es un sustituto de FastAPI: Streamlit no es una API REST.</li>
+<li>No se sube un Excel nuevo ni se descarga un modelo de internet.</li>
+</ul>
+<h1 id="el-problema-de-negocio">3. El problema de negocio</h1>
+<p>La plataforma de ventas ya tiene histórico. En unidades anteriores se
+persistió, se midió calidad, se hizo SQL avanzado y se leyó a escala con
+Spark. En FastAPI se <strong>sirvió</strong> el modelo a <em>otro
+programa</em>.</p>
+<p>El hueco que queda: un responsable de CRM, un docente o un analista
+quiere preguntar</p>
+<blockquote>
+<p>«Si este cliente tiene 52 compras y 23 601 € de historial, ¿cuánto
+estimamos que gastará en 90 días?»</p>
+</blockquote>
+<p>sin escribir un <code>POST</code> ni un notebook. Eso es un
+<strong>data app</strong>: una aplicación pequeña, hecha por quien
+entiende el dato, para <em>usar</em> un modelo o un análisis.</p>
+<p>Streamlit se posiciona exactamente ahí. La documentación oficial de
+<em>Get started</em> lo presenta como la forma de construir <em>data
+apps</em>: mostrar datos, dibujar gráficos, añadir widgets, cachear
+cómputo y definir temas (<a href="https://docs.streamlit.io/get-started">docs.streamlit.io/get-started</a>).</p>
+<p>En esta clase el <em>data app</em> no analiza un CSV suelto:
+<strong>pregunta a un cerebro ya entrenado</strong>.</p>
+<h1 id="entrenar-no-es-servir">4. Entrenar no es servir</h1>
+<pre><code>ENTRENAR (offline, una vez)          SERVIR (online, muchas veces)
+ventas.csv → features → fit()        cargar el archivo UNA vez
+           → archivo .joblib         cada clic / cada POST solo predict()</code></pre>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Momento</th>
+<th>Quién</th>
+<th>Qué ocurre</th>
+<th>Dónde en esta carpeta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entrenar</td>
+<td>script, no la app</td>
+<td><code>fit()</code>, escribe disco</td>
+<td><code>scripts/entrenar_modelos.py</code></td>
+</tr>
+<tr>
+<td>Cargar</td>
+<td>arranque de la app</td>
+<td><code>joblib.load</code></td>
+<td><code>src/carga_modelos.py</code> + caché</td>
+</tr>
+<tr>
+<td>Inferir</td>
+<td>cada interacción</td>
+<td><code>modelo.predict(x)</code></td>
+<td><code>src/prediccion.py</code></td>
+</tr>
+</tbody>
+</table>
+<p>La app <strong>nunca</strong> llama a <code>fit()</code>. Si el
+<code>.joblib</code> no está, el error debe ser claro: «ejecuta el
+script», no un <code>FileNotFoundError</code> a mitad de un clic.</p>
+<p>Ese dibujo es el mismo de FastAPI. Cambia solo <em>quién pulsa el
+botón</em>.</p>
+<h1 id="dos-puertas-al-mismo-cerebro-fastapi-y-streamlit">5. Dos puertas
+al mismo cerebro: FastAPI y Streamlit</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>FastAPI (clase anterior)</th>
+<th>Streamlit (esta clase)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cliente</td>
+<td>Otro programa, otra API, un móvil</td>
+<td>Una persona en el navegador</td>
+</tr>
+<tr>
+<td>Idioma</td>
+<td>HTTP + JSON</td>
+<td>Widgets (slider, formulario, pestaña)</td>
+</tr>
+<tr>
+<td>Proceso</td>
+<td><code>uvicorn api.main:app --port 8000</code></td>
+<td><code>streamlit run app.py</code> (puerto 8501)</td>
+</tr>
+<tr>
+<td>Contrato de entrada</td>
+<td>Pydantic (<code>EntradaPrediccion</code>)</td>
+<td><code>min_value</code>, tipos del widget, <code>st.form</code></td>
+</tr>
+<tr>
+<td>Carta</td>
+<td><code>/docs</code> (OpenAPI / Swagger)</td>
+<td>La propia página</td>
+</tr>
+<tr>
+<td>Cocinero</td>
+<td><code>modelos/*.joblib</code></td>
+<td><strong>El mismo archivo</strong> (copia local)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Frase de clase.</strong> <em>FastAPI habla JSON. Streamlit
+habla sliders. El cerebro es el mismo archivo.</em></p>
+<p>FastAPI sigue siendo la pieza correcta cuando un microservicio, un
+ERP o un batch necesita predicciones. Streamlit es la pieza correcta
+cuando un humano tiene que <em>ver y tocar</em> el modelo. En un trabajo
+real conviven: la API en producción, el mostrador Streamlit para
+<em>demo, QA y negocio</em>.</p>
+<p>Esta carpeta está <strong>aislada</strong> a propósito: no importa
+<code>api/</code> ni el <code>src/</code> del proyecto padre. El
+<code>.joblib</code> se copió. El alumno no depende de Uvicorn hoy.</p>
+<h1 id="qué-es-streamlit-según-la-documentación-oficial">6. Qué es
+Streamlit según la documentación oficial</h1>
+<p>Definición operativa (documentación de Streamlit, <em>Get
+started</em> y <em>Fundamentals</em>):</p>
+<blockquote>
+<p>Streamlit es un framework de Python para convertir un script en una
+aplicación web de datos. El desarrollador escribe Python; el framework
+pinta la interfaz y vuelve a ejecutar el script cuando el usuario
+interactúa.</p>
+</blockquote>
+<p>Implicaciones que hay que saber de memoria:</p>
+<ol type="1">
+<li><strong>No hay plantillas HTML.</strong> <code>st.title</code>,
+<code>st.slider</code>, <code>st.dataframe</code> <em>son</em> la
+interfaz.</li>
+<li><strong>El archivo es el programa.</strong> Se lanza con
+<code>streamlit run archivo.py</code>, no con el botón Run de
+Jupyter.</li>
+<li><strong>El servidor abre el navegador</strong> en
+<code>http://localhost:8501</code> por defecto.</li>
+<li><strong>Cada interacción rerunea el script</strong> de arriba abajo
+(capítulo 7).</li>
+<li>Está pensado para <em>data apps</em> (tablas, gráficos, modelos), no
+para un e-commerce con carrito y login complejo. Se puede, pero no es su
+fuerte.</li>
+</ol>
+<p>Instalación oficial: entorno virtual +
+<code>pip install streamlit</code>. En esta clase el pin está en
+<code>requirements.txt</code> (<code>streamlit==1.39.0</code>) para que
+todos vean lo mismo.</p>
+<p>Documentación de partida: <a href="https://docs.streamlit.io/get-started">docs.streamlit.io/get-started</a>.</p>
+<h1 id="modelo-de-ejecución-el-rerun">7. Modelo de ejecución: el
+rerun</h1>
+<p>Esta es la idea que, si no se entiende, hace que el resto parezca
+magia.</p>
+<p>La documentación de <em>execution flow</em> y <em>session state</em>
+lo dice así:</p>
+<blockquote>
+<p>Por defecto, las apps Streamlit ejecutan el script
+<strong>entero</strong>. Cada vez que el usuario interactúa, Streamlit
+vuelve a correr el archivo de la primera línea a la última. Cada rerun
+parte de una pizarra en blanco: las variables locales
+<strong>no</strong> se comparten entre ejecuciones.</p>
+</blockquote>
+<p>Fuente: <a href="https://docs.streamlit.io/develop/api-reference/execution-flow">docs.streamlit.io/develop/api-reference/execution-flow</a>
+y <a href="https://docs.streamlit.io/develop/concepts/architecture/session-state">docs.streamlit.io/develop/concepts/architecture/session-state</a>.</p>
+<p>Consecuencias prácticas:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Si haces esto</th>
+<th>Pasa esto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>modelo = joblib.load(...)</code> al inicio, sin caché</td>
+<td>Cada slider relée el archivo. Lento e inútil</td>
+</tr>
+<tr>
+<td><code>contador = 0</code> y luego <code>contador += 1</code></td>
+<td>En el siguiente rerun <code>contador</code> vuelve a 0</td>
+</tr>
+<tr>
+<td>Mueves un slider</td>
+<td>Se pinta otra vez el título, la barra lateral, las pestañas</td>
+</tr>
+<tr>
+<td><code>st.button(&quot;Saludar&quot;)</code></td>
+<td>Devuelve <code>True</code> <strong>solo</strong> en el clic; al
+siguiente rerun es <code>False</code></td>
+</tr>
+</tbody>
+</table>
+<p>Por eso existen tres mecanismos oficiales que <em>rompen</em> la
+pizarra en blanco de forma controlada:</p>
+<ol type="1">
+<li><strong>Estado de los widgets</strong> — Streamlit recuerda el valor
+del slider él solo.</li>
+<li><strong><code>st.session_state</code></strong> — tú guardas
+variables entre reruns (por pestaña del navegador).</li>
+<li><strong>Caché (<code>cache_data</code> /
+<code>cache_resource</code>)</strong> — resultados o recursos
+<strong>compartidos entre usuarios</strong>, no solo entre clics.</li>
+</ol>
+<p><code>st.rerun()</code> fuerza un rerun inmediato.
+<code>st.stop()</code> corta el script. <code>@st.fragment</code>
+permite rerunear <em>solo un trozo</em> (avanzado; no lo necesitamos
+hoy).</p>
+<p><strong>Experimento de clase.</strong> Lanza
+<code>app_hola.py</code>, mueve el slider y mira la terminal: Streamlit
+reimprime el script. Aún no hay modelo. Solo se ve el rerun.</p>
+<h1 id="widgets-pintan-y-devuelven-un-valor">8. Widgets: pintan y
+devuelven un valor</h1>
+<p>Un widget hace <strong>dos cosas a la vez</strong>: dibuja un control
+y <strong>devuelve</strong> a Python el valor actual. No hay un
+<code>onChange</code> obligatorio como en JavaScript clásico: el valor
+<em>es</em> la variable.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gasto <span class="op">=</span> st.slider(<span class="st">&quot;Gasto histórico (€)&quot;</span>, min_value<span class="op">=</span><span class="dv">0</span>, max_value<span class="op">=</span><span class="dv">20000</span>, value<span class="op">=</span><span class="dv">2000</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># gasto es un int. Si el alumno mueve la barra, el script se relanza y gasto cambia.</span></span></code></pre></div>
+<p>Catálogo mínimo de esta clase (API oficial de widgets: <a href="https://docs.streamlit.io/develop/api-reference/widgets">docs.streamlit.io/develop/api-reference/widgets</a>):</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Método</th>
+<th>Qué pinta</th>
+<th>Qué devuelve</th>
+<th>Uso en la clase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>st.text_input</code></td>
+<td>caja de texto</td>
+<td><code>str</code></td>
+<td><code>app_hola.py</code> (nombre)</td>
+</tr>
+<tr>
+<td><code>st.number_input</code></td>
+<td>número con flechas</td>
+<td><code>int</code> o <code>float</code></td>
+<td>las 4 features</td>
+</tr>
+<tr>
+<td><code>st.slider</code></td>
+<td>barra</td>
+<td>número</td>
+<td>demo del rerun</td>
+</tr>
+<tr>
+<td><code>st.radio</code></td>
+<td>opciones excluyentes</td>
+<td>el elemento elegido</td>
+<td>bosque vs red</td>
+</tr>
+<tr>
+<td><code>st.selectbox</code></td>
+<td>desplegable</td>
+<td>el elemento elegido</td>
+<td><code>cliente_id</code></td>
+</tr>
+<tr>
+<td><code>st.button</code></td>
+<td>botón</td>
+<td><code>True</code> solo en el clic</td>
+<td>saludar</td>
+</tr>
+<tr>
+<td><code>st.form_submit_button</code></td>
+<td>botón de formulario</td>
+<td><code>True</code> al enviar el form</td>
+<td>predecir</td>
+</tr>
+<tr>
+<td><code>st.title</code> / <code>st.write</code></td>
+<td>título / texto o markdown</td>
+<td>nada</td>
+<td>cabecera</td>
+</tr>
+<tr>
+<td><code>st.metric</code></td>
+<td>KPI grande</td>
+<td>nada</td>
+<td>valor predicho</td>
+</tr>
+<tr>
+<td><code>st.dataframe</code></td>
+<td>tabla</td>
+<td>nada (en esta clase)</td>
+<td>ficha del cliente</td>
+</tr>
+<tr>
+<td><code>st.bar_chart</code></td>
+<td>barras</td>
+<td>nada</td>
+<td>comparar modelos</td>
+</tr>
+<tr>
+<td><code>st.success</code> / <code>st.info</code> /
+<code>st.error</code></td>
+<td>caja de color</td>
+<td>nada</td>
+<td>mensajes</td>
+</tr>
+</tbody>
+</table>
+<p><code>value=</code> es el <strong>arrastre inicial</strong>, no un
+valor que se pisa en cada rerun. Una vez el usuario cambia el widget,
+Streamlit conserva <em>ese</em> valor (estado del widget).</p>
+<p><code>key=</code> identifica un widget cuando hay dos iguales en la
+misma página (en <code>app.py</code> el <code>cliente_id</code> de la
+pestaña Comparar lleva <code>key=&quot;cliente_cmp&quot;</code> para no chocar con
+el de la pestaña 2).</p>
+<p><code>min_value=0</code> en los <code>number_input</code> es el
+<strong>portero pobre</strong>: no es Pydantic, pero impide un gasto
+negativo desde la UI. La validación seria de producción sigue siendo un
+contrato (Pydantic en la API).</p>
+<h1 id="formularios-no-predecir-en-cada-tecla">9. Formularios: no
+predecir en cada tecla</h1>
+<p>Documentación oficial (<em>Group multiple widgets</em>):</p>
+<blockquote>
+<p>Por defecto Streamlit rerunea el script en cada interacción. A veces
+es mejor esperar a que un grupo de widgets esté relleno. Eso es
+<code>st.form</code>.</p>
+</blockquote>
+<p>Fuente: <a href="https://docs.streamlit.io/develop/api-reference/execution-flow">docs.streamlit.io/develop/api-reference/execution-flow</a>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> st.form(<span class="st">&quot;form_manual&quot;</span>):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># estos widgets NO disparan rerun al teclear</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    lanzar <span class="op">=</span> st.form_submit_button(<span class="st">&quot;Predecir gasto a 90 días&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> lanzar:</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    valor <span class="op">=</span> predecir(paquete, <span class="op">**</span>cifras)</span></code></pre></div>
+<p>Reglas oficiales que importan hoy:</p>
+<ul>
+<li>Solo <code>st.form_submit_button</code> puede llevar
+<em>callback</em> dentro de un form.</li>
+<li>Los widgets del form <strong>sí</strong> se pueden leer y escribir
+vía Session State.</li>
+<li>El modelo <strong>no corre</strong> mientras el alumno cambia
+<code>num_compras</code>. Corre al pulsar.</li>
+</ul>
+<p>En la pestaña «Ficha a mano» de <code>app.py</code> el form existe
+precisamente para no llamar a <code>predict()</code> en cada tecla. En
+la pestaña «Elegir un cliente» no hace falta: cambiar el id <em>sí</em>
+debe recalcular (un clic, una predicción).</p>
+<h1 id="caché-oficial-cache_data-y-cache_resource">10. Caché oficial:
+<code>cache_data</code> y <code>cache_resource</code></h1>
+<p>Documentación: <a href="https://docs.streamlit.io/develop/concepts/architecture/caching">docs.streamlit.io/develop/concepts/architecture/caching</a>.</p>
+<blockquote>
+<p>La caché guarda resultados de llamadas lentas para no repetirlas. Los
+valores cacheados están disponibles para <strong>todos los
+usuarios</strong> de la app. Si el resultado debe ser solo de
+<em>esta</em> sesión, usa Session State.</p>
+</blockquote>
+<p>Hay <strong>dos</strong> decoradores. La guía oficial pide no usar el
+antiguo <code>@st.cache</code>.</p>
+<h2 id="st.cache_data-datos">10.1 <code>st.cache_data</code> —
+datos</h2>
+<p>Para valores <strong>serializables</strong>: DataFrames, números,
+dicts, resultados de una query, transformaciones.</p>
+<ul>
+<li>Devuelve una <strong>copia</strong>. Mutar el DataFrame que te
+dieron no ensucia el caché.</li>
+<li>Si cambian los argumentos de la función, se recalcula.</li>
+<li>En esta clase: el lookup CSV y el <code>meta.json</code>.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">@st.cache_data</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _lookup() <span class="op">-&gt;</span> pd.DataFrame:</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cargar_lookup()</span></code></pre></div>
+<h2 id="st.cache_resource-recursos-globales">10.2
+<code>st.cache_resource</code> — recursos globales</h2>
+<p>Para objetos que <strong>no quieres copiar ni recargar</strong>:
+modelos de ML, conexiones a base de datos, clientes HTTP pesados.</p>
+<p>La documentación lo dice con el ejemplo de un <em>pipeline</em> de
+inferencia: <em>«the recommended way to cache global resources like ML
+models or database connections»</em>.</p>
+<ul>
+<li>No copia el objeto: es un <strong>singleton</strong>.</li>
+<li>Una mutación afecta a todos los usuarios. El objeto debe ser
+<em>thread-safe</em>.</li>
+<li>Un <code>RandomForestRegressor</code> o un <code>Pipeline</code> de
+sklearn <strong>no se mutan</strong> al predecir: <code>predict()</code>
+no cambia los árboles. Es el caso de uso canónico.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">@st.cache_resource</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _modelos() <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;sklearn&quot;</span>: cargar_paquete(<span class="st">&quot;gasto_sklearn.joblib&quot;</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;mlp&quot;</span>: cargar_paquete(<span class="st">&quot;gasto_mlp.joblib&quot;</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div>
+<h2 id="cómo-decidirlo-en-un-examen-oral">10.3 Cómo decidirlo en un
+examen oral</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Pregunta</th>
+<th>Decorador</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>¿Es un DataFrame, un JSON, una lista?</td>
+<td><code>cache_data</code></td>
+</tr>
+<tr>
+<td>¿Es un modelo, un engine de SQL, un cliente?</td>
+<td><code>cache_resource</code></td>
+</tr>
+<tr>
+<td>¿Debe ser distinto por alumno / pestaña?</td>
+<td>no es caché: <code>session_state</code></td>
+</tr>
+</tbody>
+</table>
+<p>Sin caché, cada rerun haría <code>joblib.load</code> (~decenas o
+cientos de ms, y peor si el archivo crece). Con caché, el primer usuario
+paga la carga; el resto reutiliza el objeto en RAM.</p>
+<h1 id="session-state-memoria-de-una-pestaña">11. Session State: memoria
+de una pestaña</h1>
+<p>Documentación: <a href="https://docs.streamlit.io/develop/concepts/architecture/session-state">docs.streamlit.io/develop/concepts/architecture/session-state</a>.</p>
+<blockquote>
+<p>Una <em>sesión</em> es una pestaña del navegador conectada al
+servidor. Session State comparte variables <strong>entre reruns de esa
+sesión</strong>. No se comparte entre pestañas ni entre personas.</p>
+</blockquote>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">&quot;ultimo_cliente&quot;</span> <span class="kw">not</span> <span class="kw">in</span> st.session_state:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    st.session_state.ultimo_cliente <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>st.session_state.ultimo_cliente <span class="op">=</span> cliente_id</span></code></pre></div>
+<p>Límites oficiales que debes contar:</p>
+<ul>
+<li>Recargar la pestaña (F5) o seguir un enlace markdown
+<strong>tira</strong> el WebSocket y resetea el estado.</li>
+<li>No es una base de datos. No auditamos predicciones ahí.</li>
+<li>El estado de los widgets ya vive en la sesión; Session State es para
+<em>lo que tú inventas</em> (historial de predicciones de la demo, un
+flag, un contador).</li>
+</ul>
+<p>En <code>app.py</code> <strong>no hace falta</strong> Session State
+para la demo de 2 horas: los widgets recuerdan solos y el modelo está en
+<code>cache_resource</code>. El ejercicio plus del notebook (guardar el
+último saludo de <code>app_hola.py</code>) existe solo para <em>ver</em>
+el mecanismo.</p>
+<h1 id="diseño-de-la-página">12. Diseño de la página</h1>
+<p>API de layout (oficial): <em>sidebar</em>, <em>columns</em>,
+<em>tabs</em>, <code>set_page_config</code>.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Método</th>
+<th>Efecto</th>
+<th>En <code>app.py</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>st.set_page_config</code></td>
+<td>pestaña del navegador, <code>layout=&quot;wide&quot;</code></td>
+<td><strong>solo una vez y al principio</strong> del script</td>
+</tr>
+<tr>
+<td><code>st.sidebar</code></td>
+<td>columna izquierda</td>
+<td>radio del motor + ficha <code>meta.json</code></td>
+</tr>
+<tr>
+<td><code>st.tabs</code></td>
+<td>pestañas; cada <code>with</code> es una</td>
+<td>manual / cliente / comparar</td>
+</tr>
+<tr>
+<td><code>st.columns(n)</code></td>
+<td>parte la fila</td>
+<td>4 inputs; 3 métricas</td>
+</tr>
+<tr>
+<td><code>st.divider</code></td>
+<td>línea</td>
+<td><code>app_hola.py</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>layout=&quot;wide&quot;</code> usa el ancho del monitor: útil cuando hay
+tabla + métricas. <code>app_hola.py</code> usa <code>centered</code>
+porque es una demo de un widget.</p>
+<p>No hay CSS que el alumno deba escribir. Si se quiere marca, Streamlit
+admite temas en <code>.streamlit/config.toml</code> (fuera de alcance
+hoy).</p>
+<h1 id="el-modelo-de-esta-clase">13. El modelo de esta clase</h1>
+<h2 id="qué-predice">13.1 Qué predice</h2>
+<p>Un <strong>número</strong>: el gasto estimado del cliente en los
+<strong>90 días siguientes</strong> al corte <code>2025-06-30</code>. No
+predice si compra, ni el producto, ni un <em>churn</em>.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>Nombre</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X</td>
+<td><code>num_compras</code>, <code>gasto_historico</code>,
+<code>ticket_medio</code>, <code>cantidad_total</code></td>
+<td>Resumen del <strong>pasado</strong> (compras con
+<code>fecha_venta ≤ 2025-06-30</code>)</td>
+</tr>
+<tr>
+<td>y</td>
+<td><code>gasto_siguiente_periodo</code></td>
+<td>Suma de <code>total</code> entre el 1-jul y el 28-sep-2025. Si no
+compró: <code>0</code></td>
+</tr>
+</tbody>
+</table>
+<p>El orden de las 4 columnas es un <strong>contrato</strong>. Si se
+permutan, el <code>.joblib</code> no avisa: predice basura.
+<code>src/carga_modelos.py</code> comprueba que
+<code>paquete[&quot;features&quot;] == COLUMNAS_FEATURES</code>.</p>
+<h2 id="de-dónde-salen-las-cifras">13.2 De dónde salen las cifras</h2>
+<p><code>src/features_modelo.py</code> (copia local) aplica la misma
+idea del snapshot SQL:</p>
+<ul>
+<li><strong>Pasado</strong> → lo que el modelo tiene derecho a ver.</li>
+<li><strong>Futuro</strong> → el target. El modelo <strong>no lo
+ve</strong> en <code>predict()</code>.</li>
+</ul>
+<p><code>ventas.csv</code> está copiado en <code>data/raw/</code> solo
+para <strong>reentrenar</strong> si alguien borra <code>modelos/</code>.
+La app <strong>no</strong> lee <code>ventas.csv</code>. Lee el lookup ya
+agregado.</p>
+<h2 id="los-dos-cerebros">13.3 Los dos cerebros</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Algoritmo</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gasto_sklearn.joblib</code></td>
+<td><code>RandomForestRegressor</code> (40 árboles, profundidad 8)</td>
+<td>scikit-learn clásico</td>
+</tr>
+<tr>
+<td><code>gasto_mlp.joblib</code></td>
+<td><code>Pipeline(StandardScaler + MLPRegressor(16, 8))</code></td>
+<td>red pequeña; el scaler va <em>dentro</em> del archivo</td>
+</tr>
+</tbody>
+</table>
+<p>Misma X, misma y, dos puertas en la barra lateral. El MAE ronda 1 000
+€ y el R² ~0,05–0,06: <strong>hoy no importa</strong>. Hoy se enseña a
+servir, no a ganar un ranking.</p>
+<p>El cliente <strong>8</strong> (gran comprador, target real ≈ 1 956 €)
+y el <strong>9</strong> (no volvió, target 0) son los dos ejemplos de
+pizarra.</p>
+<h2 id="qué-hay-dentro-del-.joblib">13.4 Qué hay dentro del
+<code>.joblib</code></h2>
+<p>No es «el modelo suelto». El script guardó un
+<strong>diccionario</strong>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;modelo&quot;</span>: objeto_sklearn,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;features&quot;</span>: [<span class="st">&quot;num_compras&quot;</span>, <span class="st">&quot;gasto_historico&quot;</span>, <span class="st">&quot;ticket_medio&quot;</span>, <span class="st">&quot;cantidad_total&quot;</span>],</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;target&quot;</span>: <span class="st">&quot;gasto_siguiente_periodo&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;version&quot;</span>: <span class="st">&quot;1.0.0&quot;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;metricas&quot;</span>: {<span class="st">&quot;mae&quot;</span>: ..., <span class="st">&quot;r2&quot;</span>: ..., <span class="st">&quot;segundos&quot;</span>: ...},</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>predict()</code> exige una matriz (1 fila × 4 columnas), no un
+dict. Por eso existe <code>src/prediccion.py</code>: un solo sitio que
+arma el <code>DataFrame</code> con
+<code>columns=COLUMNAS_FEATURES</code>.</p>
+<h1 id="persistencia-del-modelo-joblib-y-scikit-learn">14. Persistencia
+del modelo: joblib y scikit-learn</h1>
+<p>Documentación oficial de scikit-learn, <em>Model
+persistence</em>:</p>
+<blockquote>
+<p>Tras entrenar, se quiere <strong>guardar</strong> el modelo y
+<strong>cargarlo</strong> en otro proceso sin volver a
+<code>fit()</code>. scikit-learn recomienda <code>joblib</code> (más
+eficiente que <code>pickle</code> para arrays grandes de NumPy).</p>
+</blockquote>
+<p>Fuente: <a href="https://scikit-learn.org/stable/model_persistence.html">scikit-learn.org/stable/model_persistence.html</a>.
+joblib: <a href="https://joblib.readthedocs.io/en/stable/">joblib.readthedocs.io</a>.</p>
+<p>Reglas que hay que decir en voz alta:</p>
+<ol type="1">
+<li>El archivo es <strong>binario</strong>. No se abre en Excel.</li>
+<li><code>joblib.dump</code> / <code>joblib.load</code> deben usarse con
+<strong>la misma familia de versión</strong> de scikit-learn. Por eso
+<code>requirements.txt</code> pinea <code>scikit-learn==1.7.1</code>. Si
+un alumno instala sklearn 1.3, el <code>load</code> puede fallar o
+advertir.</li>
+<li>Cargar en cada petición es un antipatrón. En FastAPI se carga en el
+<code>lifespan</code>. En Streamlit, en
+<code>@st.cache_resource</code>.</li>
+<li>En producción el archivo suele vivir en S3, Azure Blob o MLflow, no
+en la carpeta del repo. El <em>gesto</em> es el mismo: <code>load</code>
+una vez, <code>predict</code> muchas.</li>
+</ol>
+<h1 id="mapa-de-la-carpeta-aislada">15. Mapa de la carpeta aislada</h1>
+<pre><code>streamlit/
+├── notebooks/01_streamlit_prediccion.ipynb   guion de las 2 horas
+├── app_hola.py                               widgets, sin modelo
+├── app.py                                    mostrador de predicción
+├── src/
+│   ├── features_modelo.py                    contrato X / y
+│   ├── carga_modelos.py                      joblib.load + lookup
+│   └── prediccion.py                         1 fila → número
+├── scripts/entrenar_modelos.py               solo si faltan artefactos
+├── modelos/                                  cerebro + fichas (ya copiados)
+├── data/raw/ventas.csv                       copia; solo para reentrenar
+├── requirements.txt
+└── docs/                                     este libreto + guía docente</code></pre>
+<table>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Pregunta que responde</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>features_modelo.py</code></td>
+<td>¿Qué ve el modelo y qué intenta acertar?</td>
+</tr>
+<tr>
+<td><code>entrenar_modelos.py</code></td>
+<td>¿De dónde nace el <code>.joblib</code>?</td>
+</tr>
+<tr>
+<td><code>carga_modelos.py</code></td>
+<td>¿Cómo se descongela sin romper el contrato?</td>
+</tr>
+<tr>
+<td><code>prediccion.py</code></td>
+<td>¿Cómo se arma la única fila de <code>predict()</code>?</td>
+</tr>
+<tr>
+<td><code>app_hola.py</code></td>
+<td>¿Qué es un widget y el rerun?</td>
+</tr>
+<tr>
+<td><code>app.py</code></td>
+<td>¿Cómo lo usa un humano?</td>
+</tr>
+<tr>
+<td><code>features_clientes.csv</code></td>
+<td>¿Cuál es la ficha de cada <code>cliente_id</code>?</td>
+</tr>
+</tbody>
+</table>
+<p>Nada de esta carpeta importa PostgreSQL, Spark ni Uvicorn.</p>
+<h1 id="recorrido-de-app.py">16. Recorrido de <code>app.py</code></h1>
+<p>Orden de lectura en el editor (el mismo orden que el rerun):</p>
+<ol type="1">
+<li><strong><code>set_page_config</code></strong> — primero, una
+vez.</li>
+<li><strong>Funciones cacheadas</strong> — <code>_modelos</code>,
+<code>_lookup</code>, <code>_meta</code>. Se definen y luego se llaman.
+El primer rerun carga disco; los siguientes tocan RAM.</li>
+<li><strong>Cabecera</strong> — deja claro que no hay
+<code>fit()</code>.</li>
+<li><strong>Sidebar</strong> — elige el cerebro (<code>sklearn</code> /
+<code>mlp</code>) y enseña MAE y fecha de corte. El MAE alto es
+didáctico: «hoy servimos».</li>
+<li><strong>Pestaña 1 · Ficha a mano</strong> — el humano escribe las 4
+cifras. Equivale al <code>POST /predecir/sklearn</code> de FastAPI.
+<code>st.form</code> + <code>predecir</code>.</li>
+<li><strong>Pestaña 2 · Elegir un cliente</strong> — equivale al
+<code>GET /predecir/cliente/{id}</code>. Las 4 cifras salen del CSV. Se
+muestra predicho, real y error absoluto. El target <strong>no
+entra</strong> al modelo.</li>
+<li><strong>Pestaña 3 · Comparar</strong> — misma ficha, dos
+<code>.joblib</code>, un <code>st.bar_chart</code>. El contrato no
+cambia; cambia el archivo.</li>
+</ol>
+<p><code>predecir</code> no sabe si el paquete es bosque o red. Ese es
+el punto de ingeniería: <strong>un contrato, N cerebros</strong>.</p>
+<h1 id="lo-que-es-de-trabajo-y-lo-que-es-atajo-de-clase">17. Lo que es
+de trabajo y lo que es atajo de clase</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Pieza</th>
+<th>¿Producción?</th>
+<th>Comentario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entrenar offline y dejar un artefacto</td>
+<td>Sí</td>
+<td>MLflow / S3 en vez de la carpeta <code>modelos/</code></td>
+</tr>
+<tr>
+<td>Cargar el modelo una vez</td>
+<td>Sí</td>
+<td><code>cache_resource</code> o el <code>lifespan</code> de
+FastAPI</td>
+</tr>
+<tr>
+<td>Widgets + form para un humano</td>
+<td>Sí</td>
+<td>demos, herramientas internas, QA</td>
+</tr>
+<tr>
+<td>CSV congelado de junio como «base de clientes»</td>
+<td>No</td>
+<td>la ficha debe estar viva (DB, feature store, o la manda el
+cliente)</td>
+</tr>
+<tr>
+<td>MLP de scikit-learn como «la red»</td>
+<td>Gesto sí</td>
+<td>en un banco sería ONNX, PyTorch, SageMaker…</td>
+</tr>
+<tr>
+<td>Sin autenticación ni log de predicciones</td>
+<td>No</td>
+<td>Streamlit Community Cloud / SSO / tabla
+<code>predicciones</code></td>
+</tr>
+<tr>
+<td>Servir <em>solo</em> con Streamlit a 10 000 peticiones/s</td>
+<td>No</td>
+<td>eso es la API (FastAPI, BentoML, un model server)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Frase.</strong> <em>En producción el camarero para máquinas
+es la API. Streamlit es la sala de catas. El vino es el
+<code>.joblib</code>.</em></p>
+<h1 id="arranque-y-comprobaciones">18. Arranque y comprobaciones</h1>
+<p>Desde <strong>esta</strong> carpeta, con <code>py_env</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>conda activate py_env</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> <span class="op">...</span>\persisitencia\streamlit</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pip install <span class="op">-</span>r requirements<span class="op">.</span><span class="fu">txt</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>streamlit run app_hola<span class="op">.</span><span class="fu">py</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>streamlit run app<span class="op">.</span><span class="fu">py</span></span></code></pre></div>
+<p>El notebook se abre <em>después</em> del <code>pip</code>. No instala
+paquetes él solo.</p>
+<p>Si falta un <code>.joblib</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>python scripts<span class="op">/</span>entrenar_modelos<span class="op">.</span><span class="fu">py</span></span></code></pre></div>
+<p>Comprobación rápida sin UI (la misma que el Bloque 1 del notebook):
+cargar el paquete, ficha del cliente 8, <code>predecir</code>. Si eso
+funciona, la app solo es pintura.</p>
+<p>Puerto por defecto: <strong>8501</strong>. No choca con el 8000 de
+Uvicorn. Se pueden tener los dos abiertos: misma predicción, dos
+puertas.</p>
+<h1 id="glosario">19. Glosario</h1>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Término</th>
+<th>Definición en esta clase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inferencia</td>
+<td>Usar un modelo ya entrenado para obtener un número nuevo</td>
+</tr>
+<tr>
+<td>Artefacto</td>
+<td>El archivo que deja el entrenamiento (<code>.joblib</code>)</td>
+</tr>
+<tr>
+<td>Rerun</td>
+<td>Volver a ejecutar el script Streamlit de arriba abajo</td>
+</tr>
+<tr>
+<td>Widget</td>
+<td>Control visual que <strong>devuelve</strong> un valor Python</td>
+</tr>
+<tr>
+<td>Contrato</td>
+<td>Nombres y orden de columnas que el modelo espera</td>
+</tr>
+<tr>
+<td>Lookup</td>
+<td>Tabla <code>cliente_id → 4 cifras</code> (CSV, no la DB)</td>
+</tr>
+<tr>
+<td>Target</td>
+<td>Lo que el modelo intenta acertar; no se le pasa en
+<code>predict()</code></td>
+</tr>
+<tr>
+<td><code>cache_resource</code></td>
+<td>Singleton en RAM para el modelo</td>
+</tr>
+<tr>
+<td><code>cache_data</code></td>
+<td>Copia cacheada de un DataFrame / JSON</td>
+</tr>
+<tr>
+<td>Session State</td>
+<td>Memoria <em>por pestaña</em>, entre reruns</td>
+</tr>
+<tr>
+<td>FastAPI</td>
+<td>Puerta máquina–máquina (JSON)</td>
+</tr>
+<tr>
+<td>Streamlit</td>
+<td>Puerta humano–modelo (widgets)</td>
+</tr>
+<tr>
+<td>MAE</td>
+<td>Error absoluto medio; hoy no se optimiza</td>
+</tr>
+</tbody>
+</table>
+<h1 id="referencias-oficiales">20. Referencias oficiales</h1>
+<p>Documentación que este libreto resume. Conviene abrirlas en clase al
+menos una vez.</p>
+<p><strong>Streamlit</strong></p>
+<ul>
+<li>Get started: <a href="https://docs.streamlit.io/get-started" class="uri">https://docs.streamlit.io/get-started</a></li>
+<li>Fundamentals (modelo mental de <em>data app</em>): <a href="https://docs.streamlit.io/get-started/fundamentals" class="uri">https://docs.streamlit.io/get-started/fundamentals</a></li>
+<li>Execution flow (rerun, forms, <code>st.stop</code>, fragments): <a href="https://docs.streamlit.io/develop/api-reference/execution-flow" class="uri">https://docs.streamlit.io/develop/api-reference/execution-flow</a></li>
+<li>Caching overview (<code>cache_data</code> vs
+<code>cache_resource</code>): <a href="https://docs.streamlit.io/develop/concepts/architecture/caching" class="uri">https://docs.streamlit.io/develop/concepts/architecture/caching</a></li>
+<li>Caching and state (API): <a href="https://docs.streamlit.io/develop/api-reference/caching-and-state" class="uri">https://docs.streamlit.io/develop/api-reference/caching-and-state</a></li>
+<li>Session State: <a href="https://docs.streamlit.io/develop/concepts/architecture/session-state" class="uri">https://docs.streamlit.io/develop/concepts/architecture/session-state</a></li>
+<li>Widgets: <a href="https://docs.streamlit.io/develop/api-reference/widgets" class="uri">https://docs.streamlit.io/develop/api-reference/widgets</a></li>
+<li><code>st.cache_resource</code> (ejemplo oficial: cargar un modelo):
+<a href="https://docs.streamlit.io/develop/api-reference/caching-and-state/st.cache_resource" class="uri">https://docs.streamlit.io/develop/api-reference/caching-and-state/st.cache_resource</a></li>
+</ul>
+<p><strong>Modelo y serialización</strong></p>
+<ul>
+<li>scikit-learn · Model persistence: <a href="https://scikit-learn.org/stable/model_persistence.html" class="uri">https://scikit-learn.org/stable/model_persistence.html</a></li>
+<li>joblib: <a href="https://joblib.readthedocs.io/en/stable/" class="uri">https://joblib.readthedocs.io/en/stable/</a></li>
+<li><code>RandomForestRegressor</code>: <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html" class="uri">https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html</a></li>
+<li><code>MLPRegressor</code>: <a href="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html" class="uri">https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html</a></li>
+</ul>
+<p><strong>La otra puerta (clase anterior)</strong></p>
+<ul>
+<li>FastAPI: <a href="https://fastapi.tiangolo.com/" class="uri">https://fastapi.tiangolo.com/</a></li>
+<li>Pydantic: <a href="https://docs.pydantic.dev/" class="uri">https://docs.pydantic.dev/</a></li>
+</ul>
+<h1 id="ejercicios-de-estudio">21. Ejercicios de estudio</h1>
+<ol type="1">
+<li>Explica, sin código, por qué un <code>joblib.load</code> al nivel
+del módulo <em>sin</em> <code>@st.cache_resource</code> es un error de
+diseño.</li>
+<li>¿Qué decorador usarías para cachear el resultado de
+<code>predict()</code> de mil clientes? ¿Y para el objeto del modelo?
+Justifica con la documentación oficial.</li>
+<li>Cambia en <code>app.py</code> el <code>value</code> inicial de
+<code>gasto_historico</code> a 5 000. ¿Cambia la predicción de un alumno
+que <em>ya</em> había movido el widget? ¿Por qué?</li>
+<li>Cliente 9: anota predicho bosque, predicho red y target. ¿Qué le
+dirías a negocio?</li>
+<li>Añade un <code>st.slider</code> de <code>num_compras</code> en la
+pestaña manual, <em>dentro</em> del form. ¿Cuántos reruns hay hasta
+pulsar el botón?</li>
+<li>(Plus) En <code>app_hola.py</code>, guarda el último saludo en
+<code>st.session_state</code>. Recarga la pestaña. ¿Sigue ahí?
+Relaciónalo con el WebSocket de la documentación.</li>
+</ol>
+<hr />
+<p class="small">
+Fin del libreto. La clase no termina al leer: termina cuando el alumno
+ha lanzado <code>streamlit run app.py</code>, ha predicho el cliente 8 a
+mano y por id, y ha comparado los dos <code>.joblib</code> con la misma
+ficha.
+</p>
+</body>
+</html>

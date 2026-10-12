@@ -1,0 +1,23 @@
+{
+  "version": "1.0.0",
+  "fecha_corte": "2025-06-30",
+  "horizonte_dias": 90,
+  "features": [
+    "num_compras",
+    "gasto_historico",
+    "ticket_medio",
+    "cantidad_total"
+  ],
+  "target": "gasto_siguiente_periodo",
+  "sklearn": {
+    "mae": 1016.89,
+    "r2": 0.049,
+    "segundos": 0.26
+  },
+  "mlp": {
+    "mae": 1003.38,
+    "r2": 0.062,
+    "segundos": 2.84
+  },
+  "n_filas": 9996
+}
