@@ -12,12 +12,12 @@
   "sklearn": {
     "mae": 1016.89,
     "r2": 0.049,
-    "segundos": 0.38
+    "segundos": 0.29
   },
   "mlp": {
     "mae": 1003.38,
     "r2": 0.062,
-    "segundos": 5.04
+    "segundos": 4.34
   },
   "n_filas": 9996
 }
