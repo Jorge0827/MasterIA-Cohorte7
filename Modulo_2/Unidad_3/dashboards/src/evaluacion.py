@@ -31,7 +31,7 @@ def predecir_lote(paquete: dict, tabla: pd.DataFrame) -> pd.Series:
     x = tabla.loc[:, COLUMNAS_FEATURES]
     valores = paquete["modelo"].predict(x)
     
-    return pd.series(valores, index=tabla.index, name="y_pred").round(2)
+    return pd.Series(valores, index=tabla.index, name="y_pred").round(2)
 
 
 def metricas(y_real: pd.Series, y_pred: pd.Series) -> dict:
@@ -58,7 +58,7 @@ def construir_monitoreo(
     pred_mlp = predecir_lote(paquete_mlp, tabla)
     y_real = tabla[COLUMNA_TARGET]
     
-    salida = tabla.loc[:, ["cliente_id", *COLUMNAS_FEATURES, COLUMNA_TARGET]].copy
+    salida = tabla.loc[:, ["cliente_id", *COLUMNAS_FEATURES, COLUMNA_TARGET]].copy()
     salida = salida.rename(columns={COLUMNA_TARGET: "y_real"})
     salida["pred_sklearn"] = pred_sk.to_numpy()
     salida["pred_mlp"] = pred_mlp.to_numpy()
@@ -129,7 +129,7 @@ def histograma_residual(
     
     conteo = monitoreo[col].value_counts(bins=n_bins).sort_index()
     
-    etiquetas = [f"{iv.left:.0f} a {iv.rigth:.0f}" for iv in conteo.index]
+    etiquetas = [f"{iv.left:.0f} a {iv.right:.0f}" for iv in conteo.index]
     
     return pd.DataFrame({"clientes": conteo.to_numpy()}, index=etiquetas)
 

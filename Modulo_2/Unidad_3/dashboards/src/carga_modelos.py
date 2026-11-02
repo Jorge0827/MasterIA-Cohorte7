@@ -13,7 +13,7 @@ from pathlib import Path
 import joblib
 import pandas as pd
 
-from src.features_modelo import COLUMNAS_FEATURES
+from src.features_modelo import COLUMNA_TARGET, COLUMNAS_FEATURES
 
 # streamlit/src/ → raíz = streamlit/
 RAIZ = Path(__file__).resolve().parents[1]
@@ -32,6 +32,14 @@ def _exigir(ruta: Path) -> Path:
             "  python scripts/entrenar_modelos.py"
         )
     return ruta
+
+def cargar_tabla_evaluacion() -> pd.DataFrame:
+    ruta = _exigir(CARPETA / "features_clientes.csv")
+    tabla = pd.read_csv(ruta)
+    faltan = [c for c in COLUMNAS_FEATURES + [COLUMNA_TARGET] if c not in tabla.columns]
+    if faltan:
+        raise RuntimeError(f"{ruta.name} no tiene {faltan}")
+    return tabla
 
 
 def cargar_paquete(nombre_archivo: str) -> dict:
