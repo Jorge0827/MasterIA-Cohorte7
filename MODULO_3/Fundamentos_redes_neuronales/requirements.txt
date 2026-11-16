@@ -1,0 +1,7 @@
+tensorflow>=2.17
+protobuf>=6.31.1,<7
+numpy
+pandas
+scikit-learn
+matplotlib
+jupyterlab

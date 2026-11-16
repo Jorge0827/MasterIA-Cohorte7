@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fundamentos de Redes Neuronales con TensorFlow · Dev Senior Code</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    @page { size: 13.333in 7.5in; margin: 0; }
+    :root {
+      --ink: #22152f;
+      --purple: #360743;
+      --violet: #6320a4;
+      --pink: #e000a8;
+      --pink-2: #ff3bc8;
+      --cyan: #37c5ef;
+      --paper: #fbf8ff;
+      --muted: #655b70;
+      --line: #dfd3e8;
+      --soft: #f2e9fa;
+      --w: 1280px;
+      --h: 720px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #12062a;
+      font-family: "Outfit", "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    /* ---------- Diapositiva base (clara) ---------- */
+    .slide {
+      position: relative;
+      width: var(--w);
+      height: var(--h);
+      overflow: hidden;
+      padding: 58px 72px 64px;
+      background: var(--paper);
+    }
+    .slide::before {
+      content: "";
+      position: absolute;
+      width: 340px; height: 340px;
+      right: -150px; top: -170px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 60%, rgba(224,0,168,.30), rgba(99,32,164,.10) 50%, transparent 70%);
+      pointer-events: none;
+    }
+    /* ---------- Diapositiva oscura ---------- */
+    .slide.dark {
+      color: #fff;
+      background:
+        radial-gradient(ellipse at 6% 35%, rgba(55,197,239,.30) 0, rgba(55,197,239,0) 26%),
+        radial-gradient(ellipse at 78% 10%, rgba(224,0,168,.30) 0, rgba(224,0,168,0) 32%),
+        radial-gradient(ellipse at 56% 95%, rgba(224,0,168,.25) 0, rgba(224,0,168,0) 28%),
+        linear-gradient(145deg, #140a42 0%, #2e073f 52%, #170938 100%);
+    }
+    .slide.dark::after {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    .slide > * { position: relative; z-index: 2; }
+
+    .topline {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+    }
+    .dark .topline { color: rgba(255,255,255,.65); }
+    .brand { font-weight: 900; letter-spacing: -.04em; text-transform: none; font-size: 19px; color: var(--purple); }
+    .brand span { color: var(--pink); font-weight: 600; }
+    .dark .brand { color: #fff; }
+    .dark .brand span { color: var(--pink-2); }
+
+    .footer {
+      position: absolute; z-index: 3;
+      left: 72px; right: 72px; bottom: 22px;
+      display: flex; justify-content: space-between;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      color: #7a6f86; font-size: 12px; letter-spacing: .06em;
+    }
+    .footer::after { content: attr(data-n); color: var(--pink); font-weight: 800; }
+    .dark .footer { color: rgba(255,255,255,.5); border-color: rgba(255,255,255,.16); }
+
+    .kicker { color: var(--pink); font-size: 14px; font-weight: 800; letter-spacing: .24em; text-transform: uppercase; margin-bottom: 10px; }
+    .dark .kicker { color: var(--pink-2); }
+    h1 { font-size: 66px; line-height: 1.02; letter-spacing: -.04em; font-weight: 900; }
+    h2 { font-size: 40px; line-height: 1.08; letter-spacing: -.03em; font-weight: 800; color: var(--purple); margin-bottom: 14px; max-width: 1000px; }
+    .dark h2 { color: #fff; }
+    h3 { font-size: 21px; line-height: 1.2; font-weight: 800; color: var(--purple); margin-bottom: 6px; }
+    .dark h3 { color: #fff; }
+    p { font-size: 19px; line-height: 1.45; color: #4a3f56; margin-bottom: 8px; }
+    .dark p { color: rgba(255,255,255,.84); }
+    .lead { font-size: 22px; line-height: 1.42; color: #4a3f56; max-width: 1000px; margin-bottom: 18px; }
+    .dark .lead { color: rgba(255,255,255,.86); }
+    strong { color: var(--purple); }
+    .dark strong { color: #fff; }
+    em.hl { font-style: normal; color: var(--pink); font-weight: 800; }
+    .dark em.hl { color: var(--pink-2); }
+
+    ul.list { padding-left: 22px; }
+    ul.list li { font-size: 18.5px; line-height: 1.42; margin-bottom: 7px; color: #4a3f56; }
+    .dark ul.list li { color: rgba(255,255,255,.86); }
+    ul.list li::marker { color: var(--pink); }
+
+    code, .mono { font-family: "JetBrains Mono", Consolas, monospace; }
+    code { font-size: .86em; background: #efe2f8; color: var(--purple); padding: 1px 6px; border-radius: 5px; }
+    .dark code { background: rgba(255,255,255,.12); color: #ffd6f4; }
+    pre {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 14.5px; line-height: 1.5;
+      background: #1a0f2e; color: #f1e8ff;
+      border: 1px solid #3a2a55; border-left: 4px solid var(--pink);
+      border-radius: 10px;
+      padding: 14px 18px;
+      white-space: pre;
+      overflow: hidden;
+    }
+    pre .c { color: #a493c2; }
+    pre .k { color: #ff7ad9; }
+    pre .s { color: #8fe3a8; }
+    pre .n { color: #7fd6ff; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .grid-60 { display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px; align-items: start; }
+
+    .card { padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.85); }
+    .card.soft { background: var(--soft); border-color: transparent; }
+    .card.accent { color: #fff; border: none; background: linear-gradient(135deg, var(--purple), var(--violet)); }
+    .card.accent h3, .card.accent strong { color: #fff; }
+    .card.accent p { color: rgba(255,255,255,.86); }
+    .dark .card { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.14); }
+    .card p { font-size: 17px; margin-bottom: 0; }
+    .num {
+      display: inline-grid; place-items: center;
+      width: 34px; height: 34px; border-radius: 50%;
+      margin-bottom: 10px;
+      color: #fff; background: linear-gradient(135deg, var(--pink), var(--violet));
+      font-weight: 900; font-size: 15px;
+    }
+    .tag { display: inline-block; padding: 3px 12px; border-radius: 99px; background: #eadcf4; color: var(--purple); font-size: 13px; font-weight: 800; margin: 0 6px 6px 0; }
+    .dark .tag { background: rgba(255,255,255,.13); color: #fff; }
+
+    .callout {
+      padding: 14px 18px; margin-top: 14px;
+      border-left: 5px solid var(--pink); border-radius: 0 12px 12px 0;
+      background: #f1e5f8; font-size: 18px; line-height: 1.4; color: #3d3249;
+    }
+    .callout strong { color: var(--pink); }
+    .dark .callout { background: rgba(255,255,255,.09); color: #fff; }
+    .dark .callout strong { color: var(--pink-2); }
+
+    .big-quote {
+      font-size: 30px; font-weight: 750; line-height: 1.25; letter-spacing: -.02em;
+      border-left: 4px solid var(--pink); padding-left: 24px; max-width: 1000px;
+    }
+
+    table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 16.5px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    th { background: var(--purple); color: #fff; text-align: left; padding: 9px 12px; font-weight: 700; }
+    td { padding: 8px 12px; border-top: 1px solid var(--line); color: #3d3249; vertical-align: top; line-height: 1.32; background: #fff; }
+    tr:nth-child(even) td { background: #faf5fd; }
+    .dark table { border-color: rgba(255,255,255,.18); }
+    .dark th { background: rgba(224,0,168,.55); }
+    .dark td { background: rgba(255,255,255,.05); color: rgba(255,255,255,.9); border-color: rgba(255,255,255,.12); }
+    .dark tr:nth-child(even) td { background: rgba(255,255,255,.09); }
+    td.win { color: var(--pink); font-weight: 900; }
+    .dark td.win { color: var(--pink-2); }
+
+    .formula {
+      display: inline-block;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 30px; font-weight: 600;
+      padding: 14px 26px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--purple), var(--violet)); color: #fff;
+      letter-spacing: -.01em;
+    }
+    .formula .p { color: var(--pink-2); }
+
+    .flow { display: flex; align-items: stretch; gap: 0; margin: 18px 0; }
+    .flow .node {
+      flex: 1; display: flex; flex-direction: column; justify-content: center;
+      padding: 14px 10px; text-align: center; border-radius: 14px;
+      color: #fff; background: linear-gradient(145deg, #401058, #64219e);
+      font-weight: 800; font-size: 18px; min-height: 108px;
+    }
+    .flow .node small { display: block; margin-top: 6px; font-size: 13.5px; font-weight: 500; opacity: .85; }
+    .flow .node.pk { background: linear-gradient(145deg, #b0008a, #e000a8); }
+    .flow .node.cy { background: linear-gradient(145deg, #1a6f95, #2aa6d4); }
+    .flow .arrow { width: 34px; display: grid; place-items: center; color: var(--pink); font-size: 28px; font-weight: 900; }
+    .dark .flow .arrow { color: var(--pink-2); }
+
+    .bars { display: grid; gap: 10px; margin-top: 8px; }
+    .bar { display: grid; grid-template-columns: 120px 1fr 70px; align-items: center; gap: 12px; font-size: 17px; }
+    .bar .track { height: 26px; border-radius: 8px; background: rgba(255,255,255,.1); overflow: hidden; }
+    .bar .fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--violet), var(--pink)); }
+    .bar b { text-align: right; }
+
+    svg text { font-family: "Outfit", "Segoe UI", sans-serif; }
+    .chart { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 10px 12px 6px; }
+    .chart h3 { font-size: 18px; margin-bottom: 4px; }
+    .chart p { font-size: 14.5px; margin: 4px 0 0; }
+    .light-chart { background: #fff; border: 1px solid var(--line); }
+
+    /* ---------- Portada ---------- */
+    .cover { display: flex; flex-direction: column; justify-content: center; padding: 70px 90px; }
+    .cover .logo { position: absolute; right: 90px; top: 50%; transform: translateY(-55%); line-height: .82; z-index: 2; }
+    .cover .logo .dev { font-size: 150px; font-weight: 900; letter-spacing: -.07em; }
+    .cover .logo .senior { font-size: 82px; font-weight: 900; letter-spacing: -.045em; margin-top: 4px; }
+    .cover .logo .code { font-size: 58px; font-weight: 900; letter-spacing: -.03em; margin-left: 6px; color: var(--pink-2); }
+    .cover h1 { max-width: 720px; }
+    .cover .subtitle { max-width: 680px; font-size: 24px; color: rgba(255,255,255,.8); margin-top: 18px; line-height: 1.35; }
+    .pill { display: inline-block; align-self: flex-start; margin-top: 30px; padding: 11px 26px; border-radius: 99px; background: linear-gradient(90deg, #d000af, #ff28c5); color: #fff; font-weight: 800; font-size: 16px; }
+    .cover .closing { position: absolute; left: 90px; bottom: 54px; font-size: 17px; font-style: italic; color: rgba(255,255,255,.6); }
+
+    /* ---------- Modo presentación (pantalla) ---------- */
+    @media screen {
+      html, body { height: 100%; overflow: hidden; }
+      .deck { position: fixed; inset: 0; display: grid; place-items: center; }
+      .stage { width: var(--w); height: var(--h); transform-origin: center center; position: relative; }
+      .slide { position: absolute; inset: 0; display: none; box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+      .slide.active { display: block; }
+      .hud {
+        position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
+        display: flex; gap: 10px; align-items: center; z-index: 10;
+        background: rgba(20,10,40,.7); border: 1px solid rgba(255,255,255,.15);
+        padding: 6px 10px; border-radius: 99px; color: #fff; font-size: 13px;
+        opacity: .25; transition: opacity .2s;
+      }
+      .hud:hover { opacity: 1; }
+      .hud button { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: 99px; padding: 4px 12px; font-family: inherit; font-weight: 700; cursor: pointer; }
+    }
+    /* ---------- Modo impresión / PDF ---------- */
+    @media print {
+      html, body { background: none; }
+      .hud { display: none; }
+      .stage { transform: none !important; }
+      .slide { display: block; page-break-after: always; break-after: page; }
+      .slide:last-child { page-break-after: auto; break-after: auto; }
+    }
+  </style>
+</head>
+<body>
+<div class="deck">
+<div class="stage" id="stage">
+
+<!-- ================================================================== 01 -->
+<section class="slide dark cover">
+  <div class="kicker">Deep Learning y Redes Neuronales Profundas · Unidad 1 · Clase 1</div>
+  <h1>Fundamentos de Redes Neuronales con TensorFlow</h1>
+  <p class="subtitle">Qué es un tensor, cómo calcula una neurona, por qué existen ReLU y Softmax, y qué pasa por dentro cuando una red aprende.</p>
+  <span class="pill">Tensores · Neuronas · Activaciones · Capas densas · Keras</span>
+  <div class="logo" aria-hidden="true"><div class="dev">dev</div><div class="senior">Senior</div><div class="code">Code</div></div>
+  <p class="closing">“Keras no hace magia: hace muy rápido lo que hoy vamos a hacer a mano.”</p>
+</section>
+
+<!-- ================================================================== 02 -->
+<section class="slide">
+  <div class="topline"><span>Ruta de la clase</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">El mapa</div>
+  <h2>Subimos escalón a escalón, de un número a una red completa.</h2>
+  <p class="lead">Cada escalón se construye <strong>a mano primero</strong> y después se comprueba que TensorFlow hace exactamente lo mismo.</p>
+  <div class="flow">
+    <div class="node cy">Tensor<small>los datos y los pesos</small></div><div class="arrow">›</div>
+    <div class="node">Neurona<small>z = w·x + b</small></div><div class="arrow">›</div>
+    <div class="node">Activación<small>ReLU · Softmax</small></div><div class="arrow">›</div>
+    <div class="node">Capa densa<small>X @ W + b</small></div><div class="arrow">›</div>
+    <div class="node">Red<small>capas apiladas</small></div><div class="arrow">›</div>
+    <div class="node pk">Entrenar<small>descenso por gradiente</small></div>
+  </div>
+  <div class="grid-3">
+    <div class="card soft"><div class="num">1</div><h3>Entender</h3><p>Qué calcula cada pieza y con qué forma (shape) viajan los datos.</p></div>
+    <div class="card soft"><div class="num">2</div><h3>Comprobar</h3><p>Lo hecho a mano coincide con <code>tf.nn</code> y <code>keras.layers.Dense</code>.</p></div>
+    <div class="card soft"><div class="num">3</div><h3>Aplicar</h3><p>Una red real diagnostica motores industriales y le gana a un modelo lineal.</p></div>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Ruta</span></div>
+</section>
+
+<!-- ================================================================== 03 -->
+<section class="slide">
+  <div class="topline"><span>Contexto</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">¿Por qué Deep Learning?</div>
+  <h2>En ML clásico una persona inventa las variables. En Deep Learning las inventa la red.</h2>
+  <div class="grid-60">
+    <table>
+      <tr><th></th><th>Machine Learning clásico</th><th>Deep Learning</th></tr>
+      <tr><td><strong>Quién crea las features</strong></td><td>La persona (<em>feature engineering</em>)</td><td>Las capas ocultas, solas</td></tr>
+      <tr><td><strong>Datos que necesita</strong></td><td>Cientos – miles</td><td>Miles – millones</td></tr>
+      <tr><td><strong>Interpretabilidad</strong></td><td>Alta</td><td>Baja (más caja negra)</td></tr>
+      <tr><td><strong>Coste de cómputo</strong></td><td>Bajo</td><td>Alto (GPU para modelos grandes)</td></tr>
+      <tr><td><strong>Dónde brilla</strong></td><td>Tablas pequeñas y medianas</td><td>Imagen, texto, audio, patrones complejos</td></tr>
+    </table>
+    <div>
+      <div class="card accent">
+        <h3>La idea central</h3>
+        <p>Cada capa transforma lo que recibe en una representación un poco más útil. Apiladas, aprenden relaciones que nadie sabría escribir como regla.</p>
+      </div>
+      <div class="callout"><strong>Ejemplo:</strong> en ML clásico tendríamos que crear a mano “distancia a 1500 rpm” o “temperatura × vibración”. La red lo descubre.</div>
+    </div>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Contexto</span></div>
+</section>
+
+<!-- ================================================================== 04 -->
+<section class="slide dark">
+  <div class="topline"><span>El caso de la clase</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Mantenimiento predictivo</div>
+  <h2>Cinco sensores de un motor. Tres decisiones posibles.</h2>
+  <div class="grid-60">
+    <table>
+      <tr><th>Sensor</th><th>Unidad</th><th>Valor típico</th></tr>
+      <tr><td><code>temperatura_c</code></td><td>°C</td><td>65</td></tr>
+      <tr><td><code>vibracion_mm_s</code></td><td>mm/s</td><td>2 – 3</td></tr>
+      <tr><td><code>rpm</code></td><td>revoluciones/min</td><td>1500 (diseño)</td></tr>
+      <tr><td><code>corriente_a</code></td><td>amperios</td><td>12</td></tr>
+      <tr><td><code>horas_uso</code></td><td>horas desde revisión</td><td>0 – 30&nbsp;000</td></tr>
+    </table>
+    <div>
+      <div class="grid-3" style="gap:10px">
+        <div class="card"><h3 style="color:#7dffb0">0 · normal</h3><p>No hacer nada</p></div>
+        <div class="card"><h3 style="color:#ffc46b">1 · desgaste</h3><p>Programar revisión</p></div>
+        <div class="card"><h3 style="color:#ff7a9c">2 · falla</h3><p>Parar el motor</p></div>
+      </div>
+      <div class="callout"><strong>Clasificación multiclase.</strong> 6&nbsp;000 lecturas sintéticas con reglas no lineales escondidas y ruido. Parar un motor sano cuesta dinero; no parar uno roto cuesta mucho más.</div>
+      <p style="font-size:16px">Archivo: <code>data/sensores_motores.csv</code> · generado por <code>src/datos.py</code></p>
+    </div>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · El problema</span></div>
+</section>
+
+<!-- ================================================================== 05 -->
+<section class="slide">
+  <div class="topline"><span>Bloque 1 · Tensores</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">La pieza más pequeña</div>
+  <h2>Un tensor es un array de números con rango, forma y tipo.</h2>
+  <div class="grid-60">
+    <table>
+      <tr><th>Rango</th><th>Nombre</th><th>En nuestro problema</th><th>Shape</th></tr>
+      <tr><td>0</td><td>escalar</td><td>la temperatura de un motor</td><td><code>()</code></td></tr>
+      <tr><td>1</td><td>vector</td><td>las 5 lecturas de un motor</td><td><code>(5,)</code></td></tr>
+      <tr><td>2</td><td>matriz</td><td>3 motores × 5 sensores (un <strong>lote</strong>)</td><td><code>(3, 5)</code></td></tr>
+      <tr><td>3</td><td>tensor 3D</td><td>2 días × 3 motores × 5 sensores</td><td><code>(2, 3, 5)</code></td></tr>
+      <tr><td>4</td><td>tensor 4D</td><td>un lote de fotos a color</td><td><code>(n, alto, ancho, 3)</code></td></tr>
+    </table>
+    <div>
+      <div class="card soft"><h3>rango · <code>ndim</code></h3><p>Cuántos ejes tiene.</p></div>
+      <div class="card soft" style="margin-top:10px"><h3>forma · <code>shape</code></h3><p>Cuántos elementos hay en cada eje.</p></div>
+      <div class="card soft" style="margin-top:10px"><h3>tipo · <code>dtype</code></h3><p><code>float32</code> casi siempre en redes.</p></div>
+    </div>
+  </div>
+  <div class="callout"><strong>¿Y por qué no NumPy?</strong> Un tensor puede vivir en <strong>GPU</strong> y TensorFlow sabe calcular la <strong>derivada</strong> de cualquier operación hecha con él. Sin derivadas no hay entrenamiento. “TensorFlow” = tensores que <em>fluyen</em> por operaciones.</div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Tensores</span></div>
+</section>
+
+<!-- ================================================================== 06 -->
+<section class="slide">
+  <div class="topline"><span>Bloque 1 · Tensores</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Crear tensores</div>
+  <h2><code style="font-size:.8em">tf.constant</code>: los datos se guardan inmutables.</h2>
+  <div class="grid-2">
+<pre><span class="k">import</span> tensorflow <span class="k">as</span> tf
+
+<span class="c"># rango 1: las 5 lecturas de UN motor</span>
+vector = tf.constant([<span class="n">72.5</span>, <span class="n">3.1</span>, <span class="n">1480.0</span>, <span class="n">12.4</span>, <span class="n">8200.0</span>])
+
+<span class="c"># rango 2: un LOTE de 3 motores x 5 sensores</span>
+matriz = tf.constant([
+    [<span class="n">72.5</span>, <span class="n">3.1</span>, <span class="n">1480.0</span>, <span class="n">12.4</span>,  <span class="n">8200.0</span>],
+    [<span class="n">58.0</span>, <span class="n">1.2</span>, <span class="n">1510.0</span>, <span class="n">10.9</span>,  <span class="n">1500.0</span>],
+    [<span class="n">91.3</span>, <span class="n">7.8</span>, <span class="n">1020.0</span>, <span class="n">17.6</span>, <span class="n">26000.0</span>],
+])
+matriz.ndim, matriz.shape, matriz.dtype
+<span class="c"># -> 2, (3, 5), float32</span>
+
+tf.constant([<span class="n">1</span>, <span class="n">2</span>]) + tf.constant([<span class="n">1.0</span>, <span class="n">2.0</span>])
+<span class="c"># -> InvalidArgumentError: int32 + float32</span>
+tf.cast(enteros, tf.float32)   <span class="c"># conversión explícita</span></pre>
+    <div>
+      <ul class="list">
+        <li>Los datos entran a la red <strong>por lotes</strong>: una fila por ejemplo, una columna por variable.</li>
+        <li>TensorFlow <strong>no convierte tipos solo</strong>. En GPU, convertir en silencio sería lento y escondería bugs.</li>
+        <li>Un <code>tf.constant</code> no se puede modificar: <code>t[0] = 80</code> da <code>TypeError</code>. Cada operación crea un tensor <strong>nuevo</strong>.</li>
+        <li><code>.numpy()</code> lo convierte a NumPy para pandas o matplotlib.</li>
+      </ul>
+      <div class="callout"><strong>Frase para recordar:</strong> “un motor es un vector; un lote de motores es una matriz”.</div>
+    </div>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · tf.constant</span></div>
+</section>
+
+<!-- ================================================================== 07 -->
+<section class="slide">
+  <div class="topline"><span>Bloque 1 · Tensores</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Operaciones</div>
+  <h2><code style="font-size:.8em">*</code> multiplica posición a posición. <code style="font-size:.8em">@</code> es producto de matrices.</h2>
+  <div class="grid-3">
+    <div class="card">
+      <h3>Elemento a elemento</h3>
+<pre style="font-size:15px">[[1, 2],    [[10, 20],
+ [3, 4]]  *  [30, 40]]
+= [[10,  40],
+   [90, 160]]</pre>
+      <p style="margin-top:8px">Shapes iguales. Cada posición con su pareja.</p>
+    </div>
+    <div class="card">
+      <h3>Producto de matrices</h3>
+<pre style="font-size:15px">[[1, 2],    [[10, 20],
+ [3, 4]]  @  [30, 40]]
+= [[ 70, 100],
+   [150, 220]]</pre>
+      <p style="margin-top:8px">Fila × columna, multiplicar y <strong>sumar</strong>: 1·10 + 2·30 = <em class="hl">70</em>. Es lo que hace una neurona.</p>
+    </div>
+    <div class="card accent">
+      <h3>La regla de las shapes</h3>
+      <p class="mono" style="font-size:19px;margin:10px 0">(filas, <span style="color:#ff9be6">K</span>) @ (<span style="color:#ff9be6">K</span>, cols)<br>→ (filas, cols)</p>
+      <p>Las dimensiones interiores <strong>K</strong> deben coincidir.</p>
+      <p class="mono" style="font-size:16px;margin-top:8px">(3, 5) @ (5, 2) → (3, 2) ✔<br>(3, 5) @ (4, 2) → error ✘</p>
+    </div>
+  </div>
+  <div class="callout"><strong>Broadcasting:</strong> <code>(3, 5) - (5,)</code> resta la misma fila de medias a los 3 motores sin copiarla. Así se estandarizan los sensores: <code>(x − media) / desviación</code>. Y el error de shapes es <strong>el error número 1</strong> en Deep Learning.</div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Operaciones</span></div>
+</section>
+
+<!-- ================================================================== 08 -->
+<section class="slide dark">
+  <div class="topline"><span>Bloque 1 · Tensores</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">El tensor que aprende</div>
+  <h2><code style="font-size:.8em">tf.Variable</code>: los pesos de la red viven aquí.</h2>
+  <div class="grid-60">
+    <div>
+      <table>
+        <tr><th></th><th><code>tf.constant</code></th><th><code>tf.Variable</code></th></tr>
+        <tr><td><strong>¿Se modifica?</strong></td><td>No</td><td>Sí: <code>assign</code>, <code>assign_add</code>, <code>assign_sub</code></td></tr>
+        <tr><td><strong>¿Para qué?</strong></td><td>Datos de entrada y etiquetas</td><td>Pesos y sesgos</td></tr>
+        <tr><td><strong>¿Gradiente?</strong></td><td>Solo si se pide</td><td>Automático (<code>trainable=True</code>)</td></tr>
+      </table>
+      <div class="callout"><strong>Entrenar una red es, literalmente, llamar a <code>assign_sub</code> miles de veces</strong> sobre sus variables, en la dirección que baja el error.</div>
+    </div>
+<pre>peso = tf.Variable(<span class="n">0.5</span>)
+
+peso.assign(<span class="n">0.8</span>)       <span class="c"># reemplaza: 0.8</span>
+peso.assign_sub(<span class="n">0.1</span>)   <span class="c"># resta:     0.7</span>
+peso.trainable          <span class="c"># True</span>
+
+<span class="c"># pesos de una capa: 5 entradas x 3 neuronas</span>
+W = tf.Variable(
+    tf.random.normal((<span class="n">5</span>, <span class="n">3</span>), stddev=<span class="n">0.5</span>)
+)
+W.shape                 <span class="c"># (5, 3)</span></pre>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · tf.Variable</span></div>
+</section>
+
+<!-- ================================================================== 09 -->
+<section class="slide">
+  <div class="topline"><span>Bloque 1 · Tensores</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">¿Qué significa aprender?</div>
+  <h2>Descenso por gradiente: corregir los pesos en contra del error.</h2>
+  <div class="grid-60">
+<pre><span class="c"># pares (C, F) sin decirle la fórmula F = 1.8·C + 32</span>
+w = tf.Variable(<span class="n">0.0</span>)
+b = tf.Variable(<span class="n">0.0</span>)
+
+<span class="k">for</span> paso <span class="k">in</span> range(<span class="n">1000</span>):
+    <span class="k">with</span> tf.GradientTape() <span class="k">as</span> cinta:     <span class="c"># 1 graba</span>
+        pred = w * c + b                  <span class="c"># 2 predice</span>
+        error = tf.reduce_mean((pred - f)**<span class="n">2</span>)  <span class="c"># 3 mide</span>
+    gw, gb = cinta.gradient(error, [w, b]) <span class="c"># 4 gradiente</span>
+    w.assign_sub(<span class="n">0.1</span> * gw)                 <span class="c"># 5 corrige</span>
+    b.assign_sub(<span class="n">0.1</span> * gb)</pre>
+    <div>
+      <table>
+        <tr><th>Paso</th><th>Error</th><th>Multiplicador</th><th>Sesgo</th></tr>
+        <tr><td>1</td><td>9&nbsp;572</td><td>0.079</td><td>15.30</td></tr>
+        <tr><td>10</td><td>2&nbsp;065</td><td>0.502</td><td>60.55</td></tr>
+        <tr><td>100</td><td>39.5</td><td>1.619</td><td>37.01</td></tr>
+        <tr><td>300</td><td>0.01</td><td>1.798</td><td>32.06</td></tr>
+        <tr><td>1000</td><td class="win">0.00</td><td class="win">1.800</td><td class="win">32.00</td></tr>
+      </table>
+      <p style="margin-top:10px;font-size:17px"><strong>Gradiente</strong> = hacia dónde sube el error si muevo cada peso. Se da un paso en sentido contrario. El tamaño del paso es la <strong>tasa de aprendizaje</strong>.</p>
+    </div>
+  </div>
+  <div class="callout"><strong>Esto es entrenar.</strong> Una red con millones de pesos hace exactamente este bucle. En Keras, <code>model.fit()</code> lo ejecuta por nosotros.</div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Descenso por gradiente</span></div>
+</section>
+
+<!-- ================================================================== 10 -->
+<section class="slide dark">
+  <div class="topline"><span>Bloque 2 · La neurona</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">De la biología a la matemática</div>
+  <h2>Una neurona suma señales ponderadas y decide si “dispara”.</h2>
+  <div class="grid-60" style="align-items:center">
+    <svg viewBox="0 0 640 330" width="640" height="330" aria-label="Diagrama de una neurona artificial">
+      <defs>
+        <linearGradient id="gN" x1="0" x2="1"><stop offset="0" stop-color="#6320a4"/><stop offset="1" stop-color="#e000a8"/></linearGradient>
+      </defs>
+      <g font-size="16" fill="#fff">
+        <g stroke="#ff3bc8" stroke-width="2" opacity=".85">
+          <line x1="150" y1="40" x2="330" y2="165"/><line x1="150" y1="102" x2="330" y2="165"/>
+          <line x1="150" y1="165" x2="330" y2="165"/><line x1="150" y1="228" x2="330" y2="165"/>
+          <line x1="150" y1="290" x2="330" y2="165"/>
+        </g>
+        <g fill="#37c5ef"><circle cx="138" cy="40" r="13"/><circle cx="138" cy="102" r="13"/><circle cx="138" cy="165" r="13"/><circle cx="138" cy="228" r="13"/><circle cx="138" cy="290" r="13"/></g>
+        <text x="0" y="45">temperatura</text><text x="0" y="107">vibración</text><text x="0" y="170">rpm</text><text x="0" y="233">corriente</text><text x="0" y="295">horas</text>
+        <g fill="#ffb8ec" font-size="14"><text x="210" y="70">w₁</text><text x="215" y="120">w₂</text><text x="220" y="158">w₃</text><text x="215" y="215">w₄</text><text x="210" y="262">w₅</text></g>
+        <circle cx="380" cy="165" r="58" fill="url(#gN)"/>
+        <text x="352" y="160" font-size="20" font-weight="800">Σ + b</text>
+        <text x="350" y="184" font-size="11.5">suma + sesgo</text>
+        <line x1="438" y1="165" x2="484" y2="165" stroke="#fff" stroke-width="2.5"/>
+        <rect x="484" y="135" width="104" height="60" rx="12" fill="rgba(255,255,255,.14)" stroke="#fff"/>
+        <text x="498" y="162" font-size="15" font-weight="800">activación</text><text x="512" y="182" font-size="13">ReLU, σ…</text>
+        <line x1="588" y1="165" x2="636" y2="165" stroke="#fff" stroke-width="2.5"/>
+        <text x="606" y="152" font-size="16" font-weight="800">a</text>
+      </g>
+    </svg>
+    <table>
+      <tr><th>Pieza</th><th>Representa</th></tr>
+      <tr><td><strong>entradas x</strong></td><td>las lecturas de los sensores</td></tr>
+      <tr><td><strong>pesos w</strong></td><td>cuánto importa cada entrada, y en qué sentido (+/−)</td></tr>
+      <tr><td><strong>sesgo b</strong></td><td>el umbral: cuánta señal hace falta para encenderse</td></tr>
+      <tr><td><strong>activación</strong></td><td>la decisión no lineal sobre z</td></tr>
+    </table>
+  </div>
+  <div style="text-align:center;margin-top:8px"><span class="formula">z = w₁x₁ + … + w₅x₅ + b <span class="p">→</span> a = activación(z)</span></div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · La neurona</span></div>
+</section>
+
+<!-- ================================================================== 11 -->
+<section class="slide">
+  <div class="topline"><span>Bloque 2 · La neurona</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Calculada a mano</div>
+  <h2>Un motor caliente y vibrando: ¿da la alarma la neurona?</h2>
+  <table style="font-size:18px">
+    <tr><th></th><th>temp</th><th>vib</th><th>rpm</th><th>corriente</th><th>horas</th><th></th></tr>
+    <tr><td><strong>x</strong> (estandarizado)</td><td>1.5</td><td>2.0</td><td>0.3</td><td>0.8</td><td>1.2</td><td class="mono">0 = típico</td></tr>
+    <tr><td><strong>w</strong> (puestos a mano)</td><td>0.8</td><td>1.2</td><td>0.1</td><td>0.4</td><td>0.6</td><td class="mono">la vibración pesa más</td></tr>
+    <tr><td><strong>x · w</strong></td><td>1.20</td><td>2.40</td><td>0.03</td><td>0.32</td><td>0.72</td><td class="mono">suma = 4.67</td></tr>
+  </table>
+  <div class="grid-3" style="margin-top:18px">
+    <div class="card soft"><div class="num">1</div><h3>Suma ponderada</h3><p class="mono" style="font-size:18px">Σ x·w = 4.67</p></div>
+    <div class="card soft"><div class="num">2</div><h3>Más el sesgo</h3><p class="mono" style="font-size:18px">z = 4.67 + (−3.0) = 1.67</p></div>
+    <div class="card accent"><div class="num">3</div><h3>Activación sigmoide</h3><p class="mono" style="font-size:18px">σ(1.67) = 0.842 → 84 % alerta</p></div>
+  </div>
+  <div class="callout"><strong>Un lote entero en una sola operación:</strong> <code>(4 motores, 5) @ (5, 1) → (4, 1)</code>, una z por motor. Sin <code>for</code>. Por eso las redes son rápidas, sobre todo en GPU. El motor “perfectamente típico” (todo 0) da <code>z = b = −3</code>: el sesgo decide qué pasa cuando no hay señal.</div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Neurona a mano</span></div>
+</section>
+
+<!-- ================================================================== 12 -->
+<section class="slide dark">
+  <div class="topline"><span>Bloque 3 · Activaciones</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Doblar la recta</div>
+  <h2>Sin activación una neurona es una recta. La activación la dobla.</h2>
+  <div class="grid-3">
+    <div class="chart">
+      <h3>Sin activación (lineal)</h3>
+      <svg viewBox="0 0 300 170" width="100%" height="170"><line x1="12" y1="85" x2="288" y2="85" stroke="rgba(255,255,255,.3)"/><line x1="150" y1="12" x2="150" y2="158" stroke="rgba(255,255,255,.3)"/><polyline points="12.0,158.0 150.0,85.0 288.0,12.0" fill="none" stroke="#37c5ef" stroke-width="4"/></svg>
+      <p>Una recta: por mucho que apiles, sigue siendo recta.</p>
+    </div>
+    <div class="chart">
+      <h3>Sigmoide · 1 / (1 + e<sup>−z</sup>)</h3>
+      <svg viewBox="0 0 300 170" width="100%" height="170"><line x1="12" y1="150.5" x2="288" y2="150.5" stroke="rgba(255,255,255,.3)"/><line x1="150" y1="12" x2="150" y2="158" stroke="rgba(255,255,255,.3)"/><polyline points="12.0,150.5 18.9,150.2 25.8,149.9 32.7,149.5 39.6,149.0 46.5,148.3 53.4,147.5 60.3,146.4 67.2,145.1 74.1,143.4 81.0,141.3 87.9,138.7 94.8,135.5 101.7,131.7 108.6,127.2 115.5,121.8 122.4,115.7 129.3,108.8 136.2,101.3 143.1,93.3 150.0,85.0 156.9,76.7 163.8,68.7 170.7,61.2 177.6,54.3 184.5,48.2 191.4,42.8 198.3,38.3 205.2,34.5 212.1,31.3 219.0,28.7 225.9,26.6 232.8,24.9 239.7,23.6 246.6,22.5 253.5,21.7 260.4,21.0 267.3,20.5 274.2,20.1 281.1,19.8 288.0,19.5" fill="none" stroke="#ffc46b" stroke-width="4"/></svg>
+      <p>Aplasta a (0, 1). Plana en los extremos → gradiente ≈ 0.</p>
+    </div>
+    <div class="chart">
+      <h3>ReLU · max(0, z)</h3>
+      <svg viewBox="0 0 300 170" width="100%" height="170"><line x1="12" y1="151" x2="288" y2="151" stroke="rgba(255,255,255,.3)"/><line x1="150" y1="12" x2="150" y2="158" stroke="rgba(255,255,255,.3)"/><polyline points="12.0,151.0 150.0,151.0 288.0,12.0" fill="none" stroke="#ff3bc8" stroke-width="4"/></svg>
+      <p>0 si z &lt; 0; z si z &gt; 0. Un “codo”. Pendiente 1 en positivos.</p>
+    </div>
+  </div>
+  <table style="margin-top:14px">
+    <tr><th>Función</th><th>Rango</th><th>Dónde se usa</th><th>Por qué</th></tr>
+    <tr><td><strong>ReLU</strong></td><td>[0, ∞)</td><td>Capas ocultas (opción por defecto)</td><td>Barata y el gradiente pasa limpio por muchas capas</td></tr>
+    <tr><td><strong>Sigmoide</strong></td><td>(0, 1)</td><td>Salida binaria (sí / no)</td><td>Se lee como una probabilidad</td></tr>
+    <tr><td><strong>Softmax</strong></td><td>(0, 1), suman 1</td><td>Salida multiclase</td><td>Una probabilidad por clase</td></tr>
+  </table>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Activaciones</span></div>
+</section>
+
+<!-- ================================================================== 13 -->
+<section class="slide">
+  <div class="topline"><span>Bloque 3 · Activaciones</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Cómo funciona por dentro</div>
+  <h2>Dos ReLU sumadas dibujan una U. Así aprende la red curvas.</h2>
+  <div class="grid-60" style="align-items:center">
+    <div class="chart light-chart">
+      <svg viewBox="0 0 420 210" width="100%" height="260">
+        <line x1="12" y1="180.7" x2="408" y2="180.7" stroke="#cdb7dc"/>
+        <line x1="210" y1="10" x2="210" y2="190" stroke="#cdb7dc" stroke-dasharray="5 5"/>
+        <polyline points="12,29.8 154.6,180.7 408,180.7" fill="none" stroke="#37c5ef" stroke-width="3" stroke-dasharray="7 5"/>
+        <polyline points="12,180.7 265.4,180.7 408,29.8" fill="none" stroke="#6320a4" stroke-width="3" stroke-dasharray="7 5"/>
+        <polyline points="12,29.8 154.6,180.7 265.4,180.7 408,29.8" fill="none" stroke="#e000a8" stroke-width="5" opacity=".9"/>
+        <text x="216" y="22" font-size="13" fill="#655b70">1500 rpm</text>
+        <text x="20" y="205" font-size="12" fill="#655b70">500 rpm</text><text x="350" y="205" font-size="12" fill="#655b70">2500 rpm</text>
+      </svg>
+    </div>
+    <div>
+      <p><span style="color:#37c5ef;font-weight:800">neurona A</span> = ReLU(1220 − rpm) → se enciende si el motor va <strong>lento</strong>.</p>
+      <p><span style="color:#6320a4;font-weight:800">neurona B</span> = ReLU(rpm − 1780) → se enciende si va <strong>rápido</strong>.</p>
+      <p><span style="color:#e000a8;font-weight:800">A + B</span> = riesgo en forma de <strong>U</strong>, mínimo en la velocidad de diseño.</p>
+      <div class="callout"><strong>Ningún peso único sobre las rpm puede hacer esto.</strong> Un peso positivo dice “más rpm, más riesgo”; uno negativo, lo contrario. Con 32 neuronas ReLU, la red combina 32 codos y aproxima cualquier curva.</div>
+    </div>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · ReLU por dentro</span></div>
+</section>
+
+<!-- ================================================================== 14 -->
+<section class="slide dark">
+  <div class="topline"><span>Bloque 3 · Activaciones</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">La capa de salida</div>
+  <h2>Softmax convierte puntuaciones en probabilidades que suman 1.</h2>
+  <div class="grid-60">
+    <div>
+      <p>Las 3 neuronas de salida dan números crudos llamados <strong>logits</strong>. Softmax:</p>
+      <ol style="padding-left:22px;font-size:18.5px;line-height:1.5;color:rgba(255,255,255,.86)">
+        <li><code>e<sup>z</sup></code> vuelve todo positivo y <strong>exagera las diferencias</strong>.</li>
+        <li>Dividir por la suma hace que todo sume 1.</li>
+        <li><code>argmax</code> elige la clase con mayor probabilidad.</li>
+      </ol>
+      <div class="bars" style="margin-top:18px">
+        <div class="bar"><span>normal · z=1</span><div class="track"><div class="fill" style="width:4.2%"></div></div><b>0.042</b></div>
+        <div class="bar"><span>desgaste · z=2</span><div class="track"><div class="fill" style="width:11.4%"></div></div><b>0.114</b></div>
+        <div class="bar"><span>falla · z=4</span><div class="track"><div class="fill" style="width:84.4%"></div></div><b>0.844</b></div>
+      </div>
+      <p style="font-size:16px;margin-top:10px">El logit 4 es solo el doble de 2, pero se lleva el 84 %.</p>
+    </div>
+<pre><span class="k">def</span> <span class="n">softmax</span>(z):
+    <span class="c"># restar el máximo no cambia el resultado</span>
+    <span class="c"># pero evita que e^z se desborde a infinito</span>
+    z = z - tf.reduce_max(z, axis=-<span class="n">1</span>, keepdims=<span class="k">True</span>)
+    e = tf.exp(z)
+    <span class="k">return</span> e / tf.reduce_sum(e, axis=-<span class="n">1</span>, keepdims=<span class="k">True</span>)
+
+softmax([<span class="n">1000.</span>, <span class="n">1001.</span>, <span class="n">1002.</span>])
+<span class="c"># sin truco: [nan nan nan]   (inf / inf)</span>
+<span class="c"># con truco: [0.09 0.245 0.665]</span></pre>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Softmax</span></div>
+</section>
+
+<!-- ================================================================== 15 -->
+<section class="slide">
+  <div class="topline"><span>Bloque 3 · Activaciones</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">La idea más importante del día</div>
+  <h2>Sin activación no hay profundidad: cien capas lineales valen lo que una.</h2>
+  <div class="grid-2" style="align-items:center">
+    <div>
+      <div class="formula" style="font-size:26px">(X @ W₁) @ W₂ = X @ (W₁ @ W₂)</div>
+      <p style="margin-top:16px"><code>W₁ @ W₂</code> es simplemente <strong>otra matriz</strong>. Dos capas sin activación equivalen a una sola capa lineal. Apilar más no añade capacidad.</p>
+      <p>Poner <strong>ReLU en medio</strong> rompe la igualdad: <code>ReLU(X @ W₁) @ W₂</code> ya no se puede reducir a una sola matriz.</p>
+    </div>
+<pre>X  = tf.random.normal((<span class="n">4</span>, <span class="n">5</span>))
+W1 = tf.random.normal((<span class="n">5</span>, <span class="n">8</span>))
+W2 = tf.random.normal((<span class="n">8</span>, <span class="n">3</span>))
+
+dos_capas = (X @ W1) @ W2
+una_capa  = X @ (W1 @ W2)
+con_relu  = relu(X @ W1) @ W2
+
+np.allclose(dos_capas, una_capa)  <span class="c"># True</span>
+np.allclose(con_relu,  una_capa)  <span class="c"># False</span></pre>
+  </div>
+  <div class="callout"><strong>Lo comprobamos con datos reales:</strong> una red de dos capas ocultas <em>sin</em> ReLU acierta el 75.9 %, lo mismo que el modelo lineal (76.2 %). Con ReLU, 89.3 %.</div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Colapso lineal</span></div>
+</section>
+
+<!-- ================================================================== 16 -->
+<section class="slide">
+  <div class="topline"><span>Bloque 4 · Capa densa</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">De una neurona a muchas</div>
+  <h2>Una capa densa son muchas neuronas en paralelo: una sola fórmula.</h2>
+  <div style="text-align:center;margin:6px 0 18px"><span class="formula">salida = activación( X <span class="p">@</span> W <span class="p">+</span> b )</span></div>
+  <div class="grid-2">
+    <table>
+      <tr><th>Tensor</th><th>Shape</th><th>Significado</th></tr>
+      <tr><td><code>X</code></td><td><code>(lote, 5)</code></td><td>motores × sensores</td></tr>
+      <tr><td><code>W</code></td><td><code>(5, 3)</code></td><td>entradas × neuronas (cada columna = una neurona)</td></tr>
+      <tr><td><code>b</code></td><td><code>(3,)</code></td><td>un sesgo por neurona</td></tr>
+      <tr><td>salida</td><td><code>(lote, 3)</code></td><td>motores × neuronas</td></tr>
+    </table>
+    <div>
+      <div class="card accent">
+        <h3>Contar parámetros</h3>
+        <p class="mono" style="font-size:20px;margin:6px 0">entradas × neuronas + neuronas</p>
+        <p class="mono" style="font-size:20px">5 × 3 + 3 = 18</p>
+      </div>
+      <p style="margin-top:12px">“<strong>Densa</strong>” (<em>fully connected</em>): cada neurona recibe <strong>todas</strong> las entradas. Los ceros de la salida son neuronas “apagadas” por ReLU para ese motor.</p>
+    </div>
+  </div>
+  <div class="callout"><strong>Keras no hace magia:</strong> <code>keras.layers.Dense(3, activation="relu")</code> crea dos variables, <code>kernel</code> (nuestra W) y <code>bias</code> (nuestra b). Copiamos nuestros pesos dentro y la salida es idéntica: <code>True</code>.</div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Capa densa</span></div>
+</section>
+
+<!-- ================================================================== 17 -->
+<section class="slide dark">
+  <div class="topline"><span>Bloque 5 · La red</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Arquitectura</div>
+  <h2>Nuestra red: un embudo de 5 sensores a 3 probabilidades.</h2>
+  <div class="flow">
+    <div class="node cy">5 sensores<small>entrada (None, 5)</small></div><div class="arrow">›</div>
+    <div class="node">Normalización<small>11 no entrenables</small></div><div class="arrow">›</div>
+    <div class="node">Dense 32 · ReLU<small>5×32+32 = 192</small></div><div class="arrow">›</div>
+    <div class="node">Dense 16 · ReLU<small>32×16+16 = 528</small></div><div class="arrow">›</div>
+    <div class="node pk">Dense 3 · Softmax<small>16×3+3 = 51</small></div>
+  </div>
+  <div class="grid-60">
+<pre>modelo = keras.Sequential(name=<span class="s">"red_motores"</span>)
+modelo.add(keras.Input(shape=(<span class="n">5</span>,)))       <span class="c"># una muestra</span>
+modelo.add(normalizador)                 <span class="c"># escala</span>
+modelo.add(layers.Dense(<span class="n">32</span>, activation=<span class="s">"relu"</span>))
+modelo.add(layers.Dense(<span class="n">16</span>, activation=<span class="s">"relu"</span>))
+modelo.add(layers.Dense(<span class="n">3</span>,  activation=<span class="s">"softmax"</span>))
+modelo.summary()   <span class="c"># Trainable params: 771</span></pre>
+    <ul class="list">
+      <li><strong>Sequential</strong>: pila de capas; la salida de una es la entrada de la siguiente.</li>
+      <li><strong>None</strong> en la shape = tamaño de lote libre: 1 motor o 10&nbsp;000.</li>
+      <li><strong>771 pesos</strong> empiezan aleatorios. Entrenar = encontrar los 771 valores que mejor diagnostican.</li>
+      <li>32 → 16 es una convención (embudo). Se elige probando.</li>
+    </ul>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Arquitectura</span></div>
+</section>
+
+<!-- ================================================================== 18 -->
+<section class="slide">
+  <div class="topline"><span>Bloque 5 · La red</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Antes de entrenar</div>
+  <h2>Normalizar y dividir: dos pasos que no se negocian.</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Normalización · <code>(x − media) / desviación</code></h3>
+      <p>Las horas llegan a 30&nbsp;000 y la vibración ronda 3. En <code>w·x + b</code> las horas aplastarían al resto y el entrenamiento oscilaría.</p>
+      <table style="margin-top:10px;font-size:15px">
+        <tr><th></th><th>temp</th><th>vib</th><th>rpm</th><th>horas</th></tr>
+        <tr><td>crudo</td><td>66.5</td><td>1.0</td><td>1914</td><td>18&nbsp;811</td></tr>
+        <tr><td>normalizado</td><td>0.16</td><td>−0.92</td><td>1.14</td><td>0.45</td></tr>
+      </table>
+      <p style="margin-top:10px"><code>adapt(X_train)</code>: media y desviación <strong>solo de train</strong>. Si viera test, sería fuga de datos.</p>
+    </div>
+    <div class="card">
+      <h3>Train · Validación · Test</h3>
+      <table style="margin-top:6px;font-size:15.5px">
+        <tr><th>Parte</th><th>%</th><th>Filas</th><th>Para qué</th></tr>
+        <tr><td>train</td><td>70</td><td>4&nbsp;200</td><td>la red <strong>aprende</strong></td></tr>
+        <tr><td>validación</td><td>15</td><td>900</td><td>se mira cada época, no aprende</td></tr>
+        <tr><td>test</td><td>15</td><td>900</td><td>nota final, <strong>una vez</strong></td></tr>
+      </table>
+      <p style="margin-top:10px"><code>stratify=y</code> mantiene el mismo % de fallas en las tres partes (55 / 25 / 19 %). <code>float32</code> porque es el tipo de TensorFlow.</p>
+    </div>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Normalización y división</span></div>
+</section>
+
+<!-- ================================================================== 19 -->
+<section class="slide dark">
+  <div class="topline"><span>Bloque 5 · Entrenar</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">compile</div>
+  <h2><code style="font-size:.8em">compile</code> decide cómo va a aprender la red.</h2>
+  <div class="grid-60">
+    <div>
+<pre>modelo.compile(
+    optimizer=keras.optimizers.Adam(learning_rate=<span class="n">0.003</span>),
+    loss=<span class="s">"sparse_categorical_crossentropy"</span>,
+    metrics=[<span class="s">"accuracy"</span>],
+)</pre>
+      <table style="margin-top:12px">
+        <tr><th>Pieza</th><th>Qué es</th></tr>
+        <tr><td><strong>Optimizador Adam</strong></td><td>La regla para mover los pesos. El <code>assign_sub</code> de Celsius, mejorado: adapta el paso de cada peso.</td></tr>
+        <tr><td><strong>Pérdida</strong></td><td>Lo que la red <strong>minimiza</strong>. <em>sparse</em> = etiquetas enteras 0/1/2.</td></tr>
+        <tr><td><strong>Métrica</strong></td><td>Solo para leer. La red <strong>no</strong> optimiza el accuracy.</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Entropía cruzada: −log(p de la clase correcta)</h3>
+      <div class="bars">
+        <div class="bar"><span>p = 0.99</span><div class="track"><div class="fill" style="width:0.2%"></div></div><b>0.01</b></div>
+        <div class="bar"><span>p = 0.9</span><div class="track"><div class="fill" style="width:2.3%"></div></div><b>0.11</b></div>
+        <div class="bar"><span>p = 0.5</span><div class="track"><div class="fill" style="width:15%"></div></div><b>0.69</b></div>
+        <div class="bar"><span>p = 0.1</span><div class="track"><div class="fill" style="width:50%"></div></div><b>2.30</b></div>
+        <div class="bar"><span>p = 0.01</span><div class="track"><div class="fill" style="width:100%"></div></div><b>4.61</b></div>
+      </div>
+      <div class="callout">Acertar con seguridad casi no cuesta. <strong>Equivocarse con seguridad cuesta muchísimo.</strong></div>
+    </div>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · compile</span></div>
+</section>
+
+<!-- ================================================================== 20 -->
+<section class="slide">
+  <div class="topline"><span>Bloque 5 · Entrenar</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">fit</div>
+  <h2><code style="font-size:.8em">fit</code> es el bucle de Celsius con 771 variables.</h2>
+  <div class="grid-60">
+    <div>
+<pre>historial = modelo.fit(
+    X_train, y_train,
+    validation_data=(X_val, y_val),  <span class="c"># mira, no aprende</span>
+    epochs=<span class="n">40</span>,                       <span class="c"># pasadas completas</span>
+    batch_size=<span class="n">64</span>,                   <span class="c"># motores por paso</span>
+)</pre>
+      <table style="margin-top:12px">
+        <tr><th>Término</th><th>Significado</th><th>Aquí</th></tr>
+        <tr><td><strong>lote</strong></td><td>motores antes de cada corrección</td><td>64</td></tr>
+        <tr><td><strong>paso</strong></td><td>un gradiente + un <code>assign_sub</code></td><td>4&nbsp;200 / 64 ≈ 66 por época</td></tr>
+        <tr><td><strong>época</strong></td><td>una pasada por todo train</td><td>40 → 2&nbsp;640 pasos</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Cómo leer las curvas</h3>
+      <ul class="list">
+        <li><strong>Train y validación bajan juntas</strong> → aprende patrones que generalizan.</li>
+        <li><strong>Train baja y validación sube</strong> → sobreajuste: memoriza train.</li>
+        <li><strong>Validación se aplana</strong> (aquí hacia la época 20) → entrenar más no aporta. <code>EarlyStopping</code> corta ahí.</li>
+        <li><strong>Nunca llega a 0</strong>: el dataset tiene ruido a propósito.</li>
+      </ul>
+      <div class="callout">Accuracy final: <strong>≈ 90 % en train y 89 % en validación</strong>. Curvas juntas: no hay sobreajuste.</div>
+    </div>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · fit</span></div>
+</section>
+
+<!-- ================================================================== 21 -->
+<section class="slide dark">
+  <div class="topline"><span>Bloque 5 · Resultados</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">El experimento clave</div>
+  <h2>¿Sirven las capas ocultas? La tabla responde.</h2>
+  <table style="font-size:19px">
+    <tr><th>Modelo (acierto en test, %)</th><th>Global</th><th>Normal</th><th>Desgaste</th><th>Falla</th></tr>
+    <tr><td>Lineal (sin capas ocultas)</td><td>76.2</td><td>90.2</td><td>44.7</td><td>77.5</td></tr>
+    <tr><td>Red 32-16 <strong>sin</strong> ReLU</td><td>75.9</td><td>91.2</td><td>43.4</td><td>74.6</td></tr>
+    <tr><td>Red 32-16 <strong>con</strong> ReLU</td><td class="win">89.3</td><td class="win">92.8</td><td class="win">77.2</td><td class="win">95.4</td></tr>
+  </table>
+  <div class="grid-3" style="margin-top:18px">
+    <div class="card"><h3>Lineal ≈ sin ReLU</h3><p>Apilar capas sin activación no añade nada. La teoría del colapso lineal, confirmada.</p></div>
+    <div class="card"><h3>Desgaste: 44 % → 77 %</h3><p>La clase intermedia depende de combinaciones sutiles: la U de las rpm y temperatura × vibración.</p></div>
+    <div class="card"><h3>Motores D y E</h3><p>Uno muy lento (900 rpm), otro muy rápido (2100). La red: <em class="hl">desgaste</em> a los dos. El lineal: “normal”.</p></div>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Resultados</span></div>
+</section>
+
+<!-- ================================================================== 22 -->
+<section class="slide">
+  <div class="topline"><span>Síntesis</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">A mano vs. Keras</div>
+  <h2>Todo lo que hace Keras ya lo hicimos a mano.</h2>
+  <table style="font-size:17.5px">
+    <tr><th>Concepto</th><th>A mano (TensorFlow)</th><th>Keras</th></tr>
+    <tr><td><strong>Pesos</strong></td><td><code>tf.Variable(tf.random.normal((5, 3)))</code></td><td><code>Dense(3).kernel</code></td></tr>
+    <tr><td><strong>Sesgo</strong></td><td><code>tf.Variable(tf.zeros(3))</code></td><td><code>Dense(3).bias</code></td></tr>
+    <tr><td><strong>Capa</strong></td><td><code>relu(X @ W + b)</code></td><td><code>Dense(3, activation="relu")</code></td></tr>
+    <tr><td><strong>Escalar datos</strong></td><td><code>(x − reduce_mean) / reduce_std</code></td><td><code>Normalization().adapt(X)</code></td></tr>
+    <tr><td><strong>Error</strong></td><td><code>reduce_mean((pred − y) ** 2)</code></td><td><code>loss="sparse_categorical_crossentropy"</code></td></tr>
+    <tr><td><strong>Gradiente</strong></td><td><code>tf.GradientTape()</code> + <code>cinta.gradient</code></td><td>dentro de <code>fit</code></td></tr>
+    <tr><td><strong>Corregir</strong></td><td><code>w.assign_sub(tasa * gradiente)</code></td><td><code>optimizer=Adam(...)</code></td></tr>
+    <tr><td><strong>Bucle</strong></td><td><code>for paso in range(1000)</code></td><td><code>fit(epochs=40, batch_size=64)</code></td></tr>
+  </table>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · A mano vs Keras</span></div>
+</section>
+
+<!-- ================================================================== 23 -->
+<section class="slide">
+  <div class="topline"><span>El notebook y el proyecto</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Cómo está organizado</div>
+  <h2>El notebook explora. Los <code style="font-size:.8em">.py</code> se quedan.</h2>
+  <div class="grid-60">
+<pre>redes_neuronales/
+├── notebooks/
+│   └── 01_fundamentos_redes_neuronales.ipynb
+├── src/
+│   ├── __init__.py      <span class="c"># src es un paquete</span>
+│   ├── datos.py         <span class="c"># genera, carga y divide</span>
+│   └── modelo.py        <span class="c"># normaliza, construye, compila</span>
+├── scripts/
+│   ├── generar_datos.py <span class="c"># lanza datos.py</span>
+│   └── entrenar.py      <span class="c"># entrena y guarda .keras</span>
+├── data/                <span class="c"># sensores_motores.csv</span>
+└── modelos/             <span class="c"># motores_red.keras</span></pre>
+    <div>
+      <div class="flow" style="margin-top:0">
+        <div class="node cy" style="min-height:80px">datos.py</div><div class="arrow">›</div>
+        <div class="node" style="min-height:80px">modelo.py</div><div class="arrow">›</div>
+        <div class="node pk" style="min-height:80px">entrenar.py</div>
+      </div>
+      <ul class="list">
+        <li><strong>Notebook</strong>: tensores, neurona, gráficos. Explorar y explicar.</li>
+        <li><strong>src/</strong>: lógica reutilizable, importable y versionable.</li>
+        <li><strong>scripts/</strong>: se ejecutan sin Jupyter, en un servidor o cada noche.</li>
+      </ul>
+      <div class="callout"><code>python scripts/entrenar.py --capas 64 32 16</code> cambia la arquitectura sin tocar código.</div>
+    </div>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Estructura</span></div>
+</section>
+
+<!-- ================================================================== 24 -->
+<section class="slide dark">
+  <div class="topline"><span>Notebook · paso a paso</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Qué hace cada bloque</div>
+  <h2>El recorrido del notebook, en seis bloques.</h2>
+  <div class="grid-3">
+    <div class="card"><div class="num">0</div><h3>Entorno</h3><p><code>set_random_seed(42)</code> para resultados repetibles; <code>sys.path</code> para importar <code>src</code>.</p></div>
+    <div class="card"><div class="num">1</div><h3>Tensores</h3><p><code>constant</code>, <code>dtype</code>, <code>*</code> vs <code>@</code>, broadcasting, <code>Variable</code> y la demo Celsius con <code>GradientTape</code>.</p></div>
+    <div class="card"><div class="num">2</div><h3>Neurona</h3><p><code>x * w</code> → <code>reduce_sum</code> → <code>+ b</code> → <code>sigmoid</code>. Luego 4 motores con <code>@</code>.</p></div>
+    <div class="card"><div class="num">3</div><h3>Activaciones</h3><p>ReLU, sigmoide y softmax escritas a mano y comparadas con <code>tf.nn</code>. Colapso lineal.</p></div>
+    <div class="card"><div class="num">4</div><h3>Capa densa</h3><p><code>relu(X @ W + b)</code> manual vs <code>Dense</code> con nuestros pesos: <code>True</code>.</p></div>
+    <div class="card"><div class="num">5</div><h3>Red real</h3><p>Recorrido por <code>datos.py</code> y <code>modelo.py</code>, <code>fit</code>, curvas, comparación y <code>entrenar.py</code>.</p></div>
+  </div>
+  <div class="callout"><strong>Regla del bloque 5:</strong> ninguna función se usa sin leer antes su código. <code>ver_codigo(función)</code> imprime el texto real del <code>.py</code>.</div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · El notebook</span></div>
+</section>
+
+<!-- ================================================================== 25 -->
+<section class="slide">
+  <div class="topline"><span>Glosario</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Vocabulario de la clase</div>
+  <h2>Los términos que deben quedar.</h2>
+  <div class="grid-2">
+    <table style="font-size:15.5px">
+      <tr><th>Término</th><th>Significado</th></tr>
+      <tr><td><strong>Tensor</strong></td><td>Array con rango, shape y dtype</td></tr>
+      <tr><td><strong>Peso / sesgo</strong></td><td>Variables que la red ajusta al aprender</td></tr>
+      <tr><td><strong>Neurona</strong></td><td>activación(w·x + b)</td></tr>
+      <tr><td><strong>Capa densa</strong></td><td>activación(X @ W + b), todas con todas</td></tr>
+      <tr><td><strong>Activación</strong></td><td>Función no lineal: ReLU, sigmoide, softmax</td></tr>
+      <tr><td><strong>Logit</strong></td><td>Salida cruda antes de softmax</td></tr>
+      <tr><td><strong>Parámetros</strong></td><td>Total de pesos y sesgos entrenables</td></tr>
+    </table>
+    <table style="font-size:15.5px">
+      <tr><th>Término</th><th>Significado</th></tr>
+      <tr><td><strong>Pérdida (loss)</strong></td><td>El número que la red minimiza</td></tr>
+      <tr><td><strong>Gradiente</strong></td><td>Dirección en la que sube el error</td></tr>
+      <tr><td><strong>Tasa de aprendizaje</strong></td><td>Tamaño de cada paso de corrección</td></tr>
+      <tr><td><strong>Optimizador</strong></td><td>Regla para mover los pesos (Adam, SGD)</td></tr>
+      <tr><td><strong>Lote / paso / época</strong></td><td>Motores por paso / una corrección / una pasada</td></tr>
+      <tr><td><strong>Sobreajuste</strong></td><td>Memorizar train y fallar con datos nuevos</td></tr>
+      <tr><td><strong>Fuga de datos</strong></td><td>Usar información de test al entrenar</td></tr>
+    </table>
+  </div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Glosario</span></div>
+</section>
+
+<!-- ================================================================== 26 -->
+<section class="slide">
+  <div class="topline"><span>Errores frecuentes</span><div class="brand">dev <span>Senior Code</span></div></div>
+  <div class="kicker">Lo que se suele decir… y lo correcto</div>
+  <h2>Cinco ideas equivocadas que conviene desmontar.</h2>
+  <table style="font-size:18px">
+    <tr><th>Lo que se dice</th><th>Lo correcto</th></tr>
+    <tr><td>“Más capas siempre es mejor”</td><td>Sin activación no suman nada; con activación, más capas necesitan más datos.</td></tr>
+    <tr><td>“La red optimiza el accuracy”</td><td>Optimiza la <strong>pérdida</strong> (entropía cruzada). El accuracy es solo para leer.</td></tr>
+    <tr><td>“Softmax elige la clase”</td><td>Softmax da probabilidades; <code>argmax</code> elige.</td></tr>
+    <tr><td>“Normalizar es opcional”</td><td>En redes es casi obligatorio: con horas en 30&nbsp;000 no converge bien.</td></tr>
+    <tr><td>“Funciona como un cerebro”</td><td>Solo se inspira en él: es una suma ponderada y una función.</td></tr>
+  </table>
+  <div class="callout"><strong>Pregunta para la clase:</strong> un motor sale <code>[0.34, 0.33, 0.33]</code>. ¿Lo paramos? La red no sabe: en negocio, eso significa <strong>revisar</strong>.</div>
+  <div class="footer"><span>Fundamentos de Redes Neuronales · Errores frecuentes</span></div>
+</section>
+
+<!-- ================================================================== 27 -->
+<section class="slide dark cover">
+  <div class="kicker">Para llevarse</div>
+  <h1 style="font-size:52px;max-width:760px">Seis ideas de la clase</h1>
+  <ol style="margin-top:22px;padding-left:26px;max-width:740px;font-size:19px;line-height:1.5;color:rgba(255,255,255,.88)">
+    <li>Un <strong>tensor</strong> tiene rango, shape y dtype. Los datos entran por lotes.</li>
+    <li><strong>Constantes</strong> = datos; <strong>variables</strong> = pesos. Aprender = <code>assign_sub</code> guiado por el gradiente.</li>
+    <li><strong>Neurona</strong>: activación(w·x + b). <strong>Capa</strong>: activación(X @ W + b).</li>
+    <li><strong>ReLU</strong> aporta la no linealidad. Sin activación, cien capas valen una.</li>
+    <li><strong>Softmax</strong> convierte logits en probabilidades que suman 1.</li>
+    <li><strong>Keras</strong> crea las mismas variables y ejecuta el mismo bucle que hicimos a mano.</li>
+  </ol>
+  <span class="pill">Próxima clase: retropropagación, pérdidas, optimizadores y sobreajuste</span>
+  <div class="logo" aria-hidden="true" style="transform:translateY(-50%) scale(.75);transform-origin:right center"><div class="dev">dev</div><div class="senior">Senior</div><div class="code">Code</div></div>
+</section>
+
+</div>
+</div>
+
+<div class="hud">
+  <button type="button" id="prev">‹</button>
+  <span id="counter">1 / 1</span>
+  <button type="button" id="next">›</button>
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll(".slide")];
+  const stage = document.getElementById("stage");
+  const counter = document.getElementById("counter");
+  slides.forEach((el, k) => { const f = el.querySelector(".footer"); if (f) f.dataset.n = String(k + 1).padStart(2, "0") + " / " + slides.length; });
+  let i = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+
+  function fit() {
+    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * 0.98;
+    stage.style.transform = "scale(" + s + ")";
+  }
+  function go(n) {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((el, k) => el.classList.toggle("active", k === i));
+    counter.textContent = (i + 1) + " / " + slides.length;
+    history.replaceState(null, "", "#" + (i + 1));
+  }
+  document.getElementById("next").onclick = () => go(i + 1);
+  document.getElementById("prev").onclick = () => go(i - 1);
+  document.addEventListener("keydown", (e) => {
+    if (["ArrowRight", " ", "PageDown"].includes(e.key)) { e.preventDefault(); go(i + 1); }
+    if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); go(i - 1); }
+    if (e.key === "Home") go(0);
+    if (e.key === "End") go(slides.length - 1);
+    if (e.key === "f") document.documentElement.requestFullscreen?.();
+  });
+  window.addEventListener("resize", fit);
+  fit();
+  go(i);
+</script>
+</body>
+</html>
